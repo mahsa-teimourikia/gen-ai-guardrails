@@ -1,0 +1,24 @@
+# Illustrative NVIDIA NeMo Guardrails configuration.
+# See the official schema before using this in production.
+models:
+  - type: main
+    engine: openai
+    model: your-model
+
+rails:
+  input:
+    flows:
+      - self check input
+      - jailbreak detection heuristics
+      - mask sensitive data on input
+  retrieval:
+    flows:
+      - check retrieval sensitive data
+  execution:
+    flows:
+      - validate tool call
+  output:
+    flows:
+      - self check output
+      - self check facts
+      - check output sensitive data

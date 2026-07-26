@@ -1,0 +1,16 @@
+{
+  "decision": "escalate",
+  "policy_version": "support.v3",
+  "reason_codes": ["write_action", "approval_required"],
+  "subject": {
+    "user_id": "user_123",
+    "tenant_id": "tenant_abc"
+  },
+  "action": {
+    "tool": "issue_refund",
+    "target": "order_456",
+    "preview": {"amount": 49.99, "currency": "USD"}
+  },
+  "evidence": ["order-service:receipt-987"],
+  "expires_at": "2026-07-25T20:00:00Z"
+}
