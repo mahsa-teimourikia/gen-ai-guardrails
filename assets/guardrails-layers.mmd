@@ -1,0 +1,25 @@
+flowchart LR
+    classDef user fill:#fff7ed,stroke:#ea580c,color:#7c2d12,stroke-width:2px
+    classDef rail fill:#eff6ff,stroke:#2563eb,color:#172554,stroke-width:2px
+    classDef model fill:#ecfdf5,stroke:#059669,color:#064e3b,stroke-width:2px
+    classDef policy fill:#f5f3ff,stroke:#7c3aed,color:#3b0764,stroke-width:2px
+    classDef risk fill:#fef2f2,stroke:#dc2626,color:#7f1d1d,stroke-width:2px
+
+    U["User / client"]:::user --> I["Input rail<br/>abuse · PII · injection · topic"]:::rail
+    I --> R["Retrieval rail<br/>ACL · provenance · poisoning"]:::rail
+    R --> M["Model / agent"]:::model
+    M --> T{"Tool or side effect?"}:::policy
+    T -->|"yes"| E["Execution rail<br/>schema · auth · approval · budget"]:::rail
+    E --> X["External system"]:::model
+    X --> O["Output rail<br/>safety · PII · schema · grounding"]:::rail
+    T -->|"no"| O
+    O --> Q["Response or safe fallback"]:::user
+    P["Policy + audit + traces<br/>metrics · alerts · kill switch"]:::policy
+    P -.-> I
+    P -.-> R
+    P -.-> E
+    P -.-> O
+    F["Human escalation<br/>review · appeal · incident"]:::risk
+    I -.-> F
+    E -.-> F
+    O -.-> F
