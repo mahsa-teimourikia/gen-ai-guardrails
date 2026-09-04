@@ -1,0 +1,30 @@
+[
+  {
+    "change_id": "change-001",
+    "kind": "threshold",
+    "author": "analyst-a",
+    "reviewer": "analyst-a",
+    "reviewer_role": "guardrail_owner"
+  },
+  {
+    "change_id": "change-002",
+    "kind": "allowlist",
+    "author": "analyst-a",
+    "reviewer": null,
+    "reviewer_role": null
+  },
+  {
+    "change_id": "change-003",
+    "kind": "policy",
+    "author": "analyst-a",
+    "reviewer": "product-owner",
+    "reviewer_role": "product_owner"
+  },
+  {
+    "change_id": "change-004",
+    "kind": "policy",
+    "author": "analyst-a",
+    "reviewer": "security-owner",
+    "reviewer_role": "guardrail_owner"
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "policy": {"owner": "security-engineering", "version": 2},
+  "boundaries_documented": true,
+  "controls": {"input": true, "retrieval": true, "tool": true, "output": true},
+  "authorization_layer": "prompt",
+  "side_effects": {"preview": true, "approval": true, "idempotency": true, "verification": true},
+  "datasets": {"false_positive": ["fp-001"], "false_negative": []},
+  "logging": {"privacy_minimized": true},
+  "budgets": {"timeout": true, "rate_limit": true, "kill_switch": true},
+  "change_control": {"review_required": true, "rollback": true},
+  "incident": {"playbook_tested": true, "appeal_tested": false}
+}
