@@ -1,0 +1,11 @@
+{
+  "policy_id": "hr-support",
+  "version": 1,
+  "owner": "security-and-hr",
+  "threshold": 0.6,
+  "mode": "enforce",
+  "prohibited": ["disclose another business unit's data", "run an unauthorized payroll change"],
+  "required": ["retain a policy version", "record a reason code"],
+  "escalation": ["high detector score", "uncertain consequential action"],
+  "tool_rules": {}
+}
