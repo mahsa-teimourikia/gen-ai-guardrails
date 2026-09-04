@@ -1,0 +1,80 @@
+[
+  {
+    "risk_id": "risk-payroll-write",
+    "asset": "Payroll adjustment tool",
+    "threat": "Employee induces an unauthorized payroll write",
+    "impact": 5,
+    "likelihood": 3,
+    "control": "Role authorization and approval before execution",
+    "owner": "hr-platform",
+    "detector": "tool-policy-v2",
+    "response": "Block and route to HR review",
+    "residual": 2,
+    "accepted_by": null
+  },
+  {
+    "risk_id": "risk-cross-bu-docs",
+    "asset": "Retrieved HR documents",
+    "threat": "Support response exposes another business unit",
+    "impact": 4,
+    "likelihood": 2,
+    "control": "Tenant filter before retrieval context",
+    "owner": "data-governance",
+    "detector": "tenant-boundary-check",
+    "response": "Block retrieval and audit",
+    "residual": 2,
+    "accepted_by": null
+  },
+  {
+    "risk_id": "risk-pii-output",
+    "asset": "Support response",
+    "threat": "PII is returned to an unauthorized audience",
+    "impact": 4,
+    "likelihood": 2,
+    "control": "Output redaction and privacy review",
+    "owner": "privacy-office",
+    "detector": "pii-pattern-detector",
+    "response": "Transform and record the redaction",
+    "residual": 2,
+    "accepted_by": null
+  },
+  {
+    "risk_id": "risk-poisoned-kb",
+    "asset": "Knowledge base",
+    "threat": "A poisoned document injects instructions into an answer",
+    "impact": 4,
+    "likelihood": 3,
+    "control": "Provenance labels and instruction isolation",
+    "owner": "knowledge-ops",
+    "detector": "injection-heuristic",
+    "response": "Quarantine the document and escalate",
+    "residual": 3,
+    "accepted_by": "knowledge-ops"
+  },
+  {
+    "risk_id": "risk-detector-outage",
+    "asset": "Safety detector",
+    "threat": "Detector outage creates an unbounded fail-open path",
+    "impact": 5,
+    "likelihood": 2,
+    "control": "Circuit breaker and risk-tiered fallback",
+    "owner": "platform-sre",
+    "detector": "detector-health-monitor",
+    "response": "Fail closed for irreversible tools",
+    "residual": 2,
+    "accepted_by": null
+  },
+  {
+    "risk_id": "risk-unreviewed-threshold",
+    "asset": "Guardrail policy",
+    "threat": "A threshold change weakens protection without review",
+    "impact": 4,
+    "likelihood": 3,
+    "control": "Independent guardrail-owner approval",
+    "owner": "security-engineering",
+    "detector": "change-audit",
+    "response": "Reject self-review and roll back",
+    "residual": 4,
+    "accepted_by": null
+  }
+]
