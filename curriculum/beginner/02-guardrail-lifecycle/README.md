@@ -1,5 +1,18 @@
 # The guardrail lifecycle
 
+**Level:** Beginner  
+**Estimated time:** 45–60 minutes  
+**Prerequisites:** [What are GenAI guardrails?](../01-what-are-guardrails/README.md)  
+**Notebook:** planned (see [ROADMAP.md](../../../ROADMAP.md))
+
+## Learning objectives
+
+- Define policy and map trust boundaries.
+- Observe and decide using typed guardrail outcomes.
+- Constrain, execute, and verify guarded actions.
+- Recover from failures and measure guardrail behavior.
+- Improve controls through staged rollout and feedback.
+
 Guardrails should be designed as a measurable lifecycle, not added as a last-minute filter. The lifecycle below applies to a chatbot, RAG pipeline, tool-using agent, or multimodal application.
 
 ## 1. Define policy

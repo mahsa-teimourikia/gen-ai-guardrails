@@ -1,5 +1,18 @@
 # Evaluation and red teaming
 
+**Level:** Advanced  
+**Estimated time:** 45–60 minutes  
+**Prerequisites:** [Scenario cookbook](../../intermediate/02-scenario-cookbook/README.md)  
+**Notebook:** planned (see [ROADMAP.md](../../../ROADMAP.md))
+
+## Learning objectives
+
+- Build a test taxonomy for guardrail evaluation.
+- Select metrics and calibrate graders.
+- Run an authorized red-team workflow.
+- Choose thresholds and use shadow or canary deployment.
+- Establish regression gates for discovered failures.
+
 Guardrails need their own evaluation. A safe-looking demo can hide false positives, bypasses, latency, privacy leakage, or unsafe side effects.
 
 ## Build a test taxonomy

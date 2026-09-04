@@ -1,5 +1,18 @@
 # Best practices for production guardrails
 
+**Level:** Intermediate  
+**Estimated time:** 45–60 minutes  
+**Prerequisites:** [The guardrail lifecycle](../../beginner/02-guardrail-lifecycle/README.md)  
+**Notebook:** planned (see [ROADMAP.md](../../../ROADMAP.md))
+
+## Learning objectives
+
+- Start with a risk register and separate policy from implementation.
+- Design boundary controls, defense in depth, and failure handling.
+- Protect untrusted content, tools, data, and the guardrail itself.
+- Version, evaluate, and operate controls with budgets and circuit breakers.
+- Keep humans involved where consequences require them and maintain an incident playbook.
+
 ## 1. Start with a risk register
 
 For each use case, record the asset, threat, impact, likelihood, control, owner, detector, response, and residual risk. Include ordinary mistakes, malicious users, compromised dependencies, and distribution shift.
