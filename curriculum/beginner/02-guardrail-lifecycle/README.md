@@ -3,15 +3,16 @@
 **Level:** Beginner  
 **Estimated time:** 45–60 minutes  
 **Prerequisites:** [What are GenAI guardrails?](../01-what-are-guardrails/README.md)  
-**Notebook:** planned (see [ROADMAP.md](../../../ROADMAP.md))
+**Notebook:** [guardrail_lifecycle.ipynb](guardrail_lifecycle.ipynb)  
+**Scenario:** Internal HR/IT support assistant
 
 ## Learning objectives
 
-- Define policy and map trust boundaries.
-- Observe and decide using typed guardrail outcomes.
-- Constrain, execute, and verify guarded actions.
-- Recover from failures and measure guardrail behavior.
-- Improve controls through staged rollout and feedback.
+- Define a versioned HR/IT policy and map its protected boundaries in sections 1–2.
+- Build privacy-safe observations and apply typed decisions in sections 3–4.
+- Execute a permitted tool idempotently, verify its receipt, and recover safely in sections 5–6.
+- Compute rates, friction, blocked attempts, and unsafe completions in section 7.
+- Compare shadow, alert, and enforce modes and improve a missed incident in section 8.
 
 Guardrails should be designed as a measurable lifecycle, not added as a last-minute filter. The lifecycle below applies to a chatbot, RAG pipeline, tool-using agent, or multimodal application.
 
@@ -69,15 +70,15 @@ Use a typed decision:
 
 ```json
 {
-  "decision": "allow|transform|block|retry|abstain|escalate",
+  "decision": "allow|transform|block|abstain|escalate",
   "policy": "customer_support.v3",
   "reason_codes": ["unsupported_claim"],
-  "confidence": 0.91,
+  "confidence": null,
   "next_step": "request_source"
 }
 ```
 
-Avoid a single opaque boolean. Reason codes support analytics, user messaging, appeals, and policy debugging.
+Avoid a single opaque boolean. Reason codes support analytics, user messaging, appeals, and policy debugging. `confidence` is optional and is populated only when a detector score drives the decision; deterministic authorization decisions use `null`.
 
 ## 5. Constrain
 
@@ -112,7 +113,7 @@ Define safe behavior for each decision:
 | Allow | Continue and record the decision |
 | Transform | Explain only when useful; preserve provenance |
 | Block | Give a concise policy-compliant alternative |
-| Retry | Cap retries and vary the strategy |
+| Retry (recovery action) | Cap retries and vary the strategy |
 | Abstain | State what evidence or permission is missing |
 | Escalate | Pause, checkpoint state, and provide context to a reviewer |
 
@@ -128,6 +129,22 @@ Track:
 - policy drift and detector drift; and
 - unsafe side effects prevented or completed.
 
+The lab uses these definitions:
+
+| Metric | Numerator | Denominator |
+| --- | --- | --- |
+| `tp` | Attack items applied `block` or `escalate` | Count of attack items |
+| `fp` | Legitimate or boundary items applied `block` or `escalate` | Count of legitimate and boundary items |
+| `fn` | Attack items applied `allow` | Count of attack items |
+| `tn` | Legitimate or boundary items applied `allow` | Count of legitimate and boundary items |
+| `tpr` | `tp` | `tp + fn` |
+| `fpr` | `fp` | `fp + tn` |
+| `attempts_blocked` | Attack items applied `block` or `escalate` | Count of attack items |
+| `unsafe_completed` | Items marked unsafe whose applied decision is `allow` | Count (not a rate) |
+| `friction` | Legitimate or boundary items applied anything except `allow` | Count of legitimate and boundary items |
+
+The traffic fixture contains frozen detector scores, not a live model. Boundary items count as legitimate for false-positive and friction calculations.
+
 ## 9. Improve
 
 Use failures to update the narrowest responsible layer. A prompt injection that reached a tool may require tool authorization, retrieval isolation, and a new regression test—not only a stronger system prompt.
@@ -142,9 +159,23 @@ Version policies, detectors, prompts, models, thresholds, and datasets together.
 4. High-risk enforcement: require approval or fail closed.
 5. Continuous monitoring: sample outcomes and refresh adversarial tests.
 
+## Exercises
+
+1. Add a policy rule for an unlisted risk and predict its shadow, alert, and enforce outcomes.
+2. Change the threshold without changing the tool rule and predict which metric moves first.
+3. Add the incident to a regression fixture and explain why the narrowest fix belongs at the tool boundary.
+
+## Setup
+
+Run the lab using the root README's [Run locally](../../../README.md#run-locally) instructions.
+
+## Where this fits
+
+Continue with [Course 03: Best practices](../../intermediate/01-best-practices/README.md) to turn lifecycle decisions into implementation patterns.
+
 ## Sources
 
 - [NIST AI RMF Playbook](https://airc.nist.gov/airmf-resources/playbook/)
 - [NIST AI RMF Generative AI Profile](https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf)
 - [OpenAI safety best practices](https://platform.openai.com/docs/guides/safety-best-practices)
-- [NVIDIA NeMo Guardrails architecture](https://docs.nvidia.com/nemo/guardrails/about-nemo-guardrails-library/how-it-works)
+- [NVIDIA NeMo Guardrails architecture (vendor documentation; terminology comparison)](https://docs.nvidia.com/nemo/guardrails/about-nemo-guardrails-library/how-it-works)

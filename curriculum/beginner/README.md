@@ -20,7 +20,7 @@ This track is for learners who build or review conversational applications, RAG 
 | Course | Main question | Core capability |
 | --- | --- | --- |
 | [01 — What are GenAI guardrails?](01-what-are-guardrails/README.md) | What is the operating envelope? | Define and test layered guardrail decisions |
-| [02 — Guardrail lifecycle](02-guardrail-lifecycle/README.md) | How does policy become a control? | Follow policy from definition through improvement |
+| [02 — Guardrail lifecycle](02-guardrail-lifecycle/README.md) | How does policy become a control? | Run a policy through shadow, enforce, measure, and improve |
 
 ### 01 — What are GenAI guardrails?
 
