@@ -27,7 +27,7 @@ This repository explains the concepts from first principles, provides scenario r
 ## Start here
 
 1. Read [What are guardrails?](curriculum/beginner/01-what-are-guardrails/README.md) for the threat model and layered control model.
-2. Learn the [guardrail lifecycle](curriculum/beginner/02-guardrail-lifecycle/README.md): define policy, intercept, decide, recover, measure, and improve.
+2. Learn the [guardrail lifecycle](curriculum/beginner/02-guardrail-lifecycle/README.md): define policy, map boundaries, observe, decide, recover, measure, and improve.
 3. Work through [best practices](curriculum/intermediate/01-best-practices/README.md) before choosing a framework.
 4. Pick a recipe in the [scenario cookbook](#scenario-cookbook) and adapt its policy, failure response, and tests.
 5. Study [evaluation and red teaming](curriculum/advanced/01-evaluation-and-red-teaming/README.md) with a representative adversarial dataset.
