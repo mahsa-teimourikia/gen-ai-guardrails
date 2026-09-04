@@ -1,0 +1,50 @@
+name: Bug report
+description: Report a reproducible problem in curriculum, examples, tests, CI, or the quiz.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve GenAI Guardrails. Do not include credentials, private data, or unredacted security findings.
+  - type: input
+    id: path
+    attributes:
+      label: File, lesson, or page
+      placeholder: curriculum/intermediate/02-scenario-cookbook/README.md
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the problem and expected behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      placeholder: |
+        1. Run …
+        2. Observe …
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      render: shell
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-submission checks
+      options:
+        - label: I searched existing issues.
+          required: true
+        - label: I removed credentials and private data.
+          required: true
+        - label: This is not a security vulnerability requiring private disclosure.
+          required: true

@@ -1,11 +1,11 @@
-name: Deploy GenAI Guardrails quiz
+name: Deploy learning hub to GitHub Pages
 
 on:
   push:
     branches: [main]
     paths:
       - "quiz/**"
-      - ".github/workflows/deploy-quiz.yml"
+      - ".github/workflows/deploy-pages.yml"
   workflow_dispatch:
 
 permissions:

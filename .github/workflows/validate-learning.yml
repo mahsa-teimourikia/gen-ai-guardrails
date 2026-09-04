@@ -1,0 +1,32 @@
+name: Validate learning materials
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install contributor tools
+        run: python -m pip install -e '.[contributor]'
+      - name: Run Python tests
+        env:
+          PYTHONPATH: .
+        run: pytest -q
+      - name: Compile Python sources
+        run: python -m compileall -q curriculum tests
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run quiz tests
+        working-directory: quiz
+        run: npm test

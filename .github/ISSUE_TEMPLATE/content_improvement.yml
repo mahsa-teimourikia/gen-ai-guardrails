@@ -1,0 +1,42 @@
+name: Curriculum or documentation improvement
+description: Suggest a correction or focused improvement to a lesson, example, reference, or quiz source.
+title: "[Content]: "
+labels: [documentation]
+body:
+  - type: input
+    id: location
+    attributes:
+      label: Content location
+      placeholder: curriculum/advanced/01-evaluation-and-red-teaming/README.md
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Improvement type
+      options:
+        - Technical correction
+        - Missing explanation or prerequisite
+        - Broken or outdated reference
+        - Example or exercise improvement
+        - Accessibility or navigation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: Current problem
+    validations:
+      required: true
+  - type: textarea
+    id: proposed
+    attributes:
+      label: Proposed improvement
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Supporting evidence
+      description: Link primary research, standards, or official documentation where relevant.
