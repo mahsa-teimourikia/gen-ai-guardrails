@@ -2,17 +2,18 @@
 
 > A self-contained learning path for designing, implementing, evaluating, and operating guardrails for generative AI applications and agents.
 
-[![Learning path](https://img.shields.io/badge/learning-path-guardrails-7c3aed)](docs/what-are-guardrails.md) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![Learning path](https://img.shields.io/badge/learning-path-guardrails-7c3aed)](curriculum/beginner/01-what-are-guardrails/README.md) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 Guardrails are the policies, validators, controls, and recovery paths that keep a generative AI system within an intended operating envelope. They are not a single prompt, model, filter, or vendor feature. Effective systems combine deterministic application controls, specialized classifiers, model-based checks, permissions, human review, and continuous evaluation.
 
-This repository explains the concepts from first principles, provides scenario recipes and code snippets, and links to maintained technologies and primary guidance. It covers both conversational LLM applications and tool-using agents.
+This repository explains the concepts from first principles, provides scenario recipes and provider-neutral companion files in the scenario-cookbook lesson, and links to maintained technologies and primary guidance. It covers both conversational LLM applications and tool-using agents.
 
 ## Contents
 
 - [Start here](#start-here)
 - [Guardrails visual model](#guardrails-visual-model)
-- [Learning path](#learning-path)
+- [Curriculum roadmap](#curriculum-roadmap)
+- [Run locally](#run-locally)
 - [Guardrail layers](#guardrail-layers)
 - [Best-practice checklist](#best-practice-checklist)
 - [Technology landscape](#technology-landscape)
@@ -25,11 +26,11 @@ This repository explains the concepts from first principles, provides scenario r
 
 ## Start here
 
-1. Read [What are guardrails?](docs/what-are-guardrails.md) for the threat model and layered control model.
-2. Learn the [guardrail lifecycle](docs/guardrail-lifecycle.md): define policy, intercept, decide, recover, measure, and improve.
-3. Work through [best practices](docs/best-practices.md) before choosing a framework.
+1. Read [What are guardrails?](curriculum/beginner/01-what-are-guardrails/README.md) for the threat model and layered control model.
+2. Learn the [guardrail lifecycle](curriculum/beginner/02-guardrail-lifecycle/README.md): define policy, intercept, decide, recover, measure, and improve.
+3. Work through [best practices](curriculum/intermediate/01-best-practices/README.md) before choosing a framework.
 4. Pick a recipe in the [scenario cookbook](#scenario-cookbook) and adapt its policy, failure response, and tests.
-5. Study [evaluation and red teaming](docs/evaluation-and-red-teaming.md) with a representative adversarial dataset.
+5. Study [evaluation and red teaming](curriculum/advanced/01-evaluation-and-red-teaming/README.md) with a representative adversarial dataset.
 6. Take the [interactive GenAI Guardrails Knowledge Check](https://mahsa-teimourikia.github.io/gen-ai-guardrails/).
 
 ## Guardrails visual model
@@ -45,30 +46,62 @@ request → input checks → retrieval/tool controls → model → output checks
 
 No layer is perfect. The design goal is defense in depth with clear ownership and safe failure behavior.
 
-## Learning path
+## Curriculum roadmap
 
-### Foundations
+The curriculum progresses from understanding the control model, to designing controls, to evaluating and operating them.
 
-- [What are guardrails?](docs/what-are-guardrails.md)
-- [Guardrail lifecycle](docs/guardrail-lifecycle.md)
+### Beginner — Understand the control model
+
+| Course | Main question | Core capability |
+| --- | --- | --- |
+| [What are GenAI guardrails?](curriculum/beginner/01-what-are-guardrails/README.md) | What is the operating envelope? | Distinguish boundaries, control types, and safe failure behavior |
+| [Guardrail lifecycle](curriculum/beginner/02-guardrail-lifecycle/README.md) | How does policy become a control? | Define, decide, execute, recover, measure, and improve |
+
+### Intermediate — Design and implement controls
+
+| Course | Main question | Core capability |
+| --- | --- | --- |
+| [Best practices](curriculum/intermediate/01-best-practices/README.md) | How should production controls be designed? | Apply risk, boundary, failure, evaluation, and operations practices |
+| [Scenario cookbook](curriculum/intermediate/02-scenario-cookbook/README.md) | How do controls vary by use case? | Compose controls for concrete trust boundaries and consequences |
+
+### Advanced — Evaluate, red-team and operate
+
+| Course | Main question | Core capability |
+| --- | --- | --- |
+| [Evaluation and red teaming](curriculum/advanced/01-evaluation-and-red-teaming/README.md) | How do we know controls work under attack? | Measure, probe, calibrate, and gate guardrail behavior |
+| [Security and privacy](curriculum/advanced/02-security-and-privacy/README.md) | How do we operate controls against threats? | Protect identities, data, tools, dependencies, and incident evidence |
+
+See the complete [curriculum map](curriculum/README.md).
+
+### Primary guidance
+
 - [NIST AI RMF Generative AI Profile](https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf)
 - [OWASP Top 10 for LLM Applications](https://genai.owasp.org/llm-top-10/)
 - [OWASP Agentic AI Threats and Mitigations](https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/)
-
-### Build and integrate
-
-- [Best practices](docs/best-practices.md)
-- [Scenario cookbook](docs/scenarios.md)
 - [NVIDIA NeMo Guardrails](https://docs.nvidia.com/nemo/guardrails/)
 - [Guardrails AI](https://guardrailsai.com/guardrails/docs)
 - [Azure AI Content Safety and Prompt Shields](https://learn.microsoft.com/en-us/azure/ai-services/content-safety/overview)
-
-### Evaluate and operate
-
-- [Evaluation and red teaming](docs/evaluation-and-red-teaming.md)
-- [Security and privacy](docs/security-and-privacy.md)
 - [OpenAI safety best practices](https://platform.openai.com/docs/guides/safety-best-practices)
 - [NIST AI RMF Playbook](https://airc.nist.gov/airmf-resources/playbook/)
+
+## Run locally
+
+```bash
+git clone https://github.com/mahsa-teimourikia/gen-ai-guardrails.git
+cd gen-ai-guardrails
+make setup-contributor
+make test
+make quiz-test
+```
+
+On Windows, create and activate a virtual environment manually with `py -3.11 -m venv .venv`, activate `.venv\Scripts\activate`, and install with `python -m pip install -e ".[contributor]"`. Run the Makefile commands from Git Bash or use the equivalent Python and npm commands in PowerShell.
+
+| Useful check | Command |
+| --- | --- |
+| Python tests | `make test` |
+| Internal links | `make links` |
+| Quiz tests | `make quiz-test` |
+| Python syntax | `python -m compileall -q curriculum tests` |
 
 ## Guardrail layers
 
@@ -144,7 +177,7 @@ The [NeMo Guardrails rail types](https://docs.nvidia.com/nemo/guardrails/about-n
 | Regulated decision support | Human decision-maker, evidence trace, uncertainty, bias testing, no automatic adverse action |
 | Multimodal application | Scan text, images, files, and OCR output; preserve provenance and modality-specific policy |
 
-See [Scenario cookbook](docs/scenarios.md) for implementation sequences and code snippets.
+See [Scenario cookbook](curriculum/intermediate/02-scenario-cookbook/README.md) for implementation sequences and its provider-neutral companion files.
 
 ## Evaluation and red teaming
 
@@ -155,7 +188,7 @@ Evaluate four dimensions separately:
 3. **Security:** unauthorized access, tool misuse, data exfiltration, and privilege escalation.
 4. **Operations:** latency, cost, false-positive friction, trace completeness, and drift.
 
-Use executable checks when possible, model graders only with calibration, and human review for high-impact decisions. Read [Evaluation and red teaming](docs/evaluation-and-red-teaming.md).
+Use executable checks when possible, model graders only with calibration, and human review for high-impact decisions. Read [Evaluation and red teaming](curriculum/advanced/01-evaluation-and-red-teaming/README.md).
 
 ## Security and privacy
 
@@ -186,6 +219,12 @@ Take the [GenAI Guardrails Knowledge Check](https://mahsa-teimourikia.github.io/
 ## Contributing
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md). Prefer primary sources, maintained open-source projects, concrete threat models, and examples that explain failure behavior as well as the happy path.
+
+Community standards and help:
+
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Support and issue-routing guide](SUPPORT.md)
+- [Security policy and private reporting](SECURITY.md)
 
 ## License
 

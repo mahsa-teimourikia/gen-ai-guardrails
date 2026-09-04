@@ -1,0 +1,34 @@
+PYTHON ?= python3
+
+.PHONY: help setup-learner setup-contributor test links quiz-test clean
+
+help:
+	@echo "Available targets:"
+	@echo "  setup-learner      Create a learner virtual environment"
+	@echo "  setup-contributor  Create a contributor virtual environment"
+	@echo "  test               Run Python tests"
+	@echo "  links              Validate internal Markdown and quiz links"
+	@echo "  quiz-test          Run quiz tests"
+	@echo "  clean              Show cleanup guidance"
+
+setup-learner:
+	$(PYTHON) -m venv .venv
+	.venv/bin/python -m pip install --upgrade pip
+	.venv/bin/python -m pip install -e '.[learner]'
+
+setup-contributor:
+	$(PYTHON) -m venv .venv
+	.venv/bin/python -m pip install --upgrade pip
+	.venv/bin/python -m pip install -e '.[contributor]'
+
+test:
+	PYTHONPATH=. $(PYTHON) -m pytest -q
+
+links:
+	$(PYTHON) scripts/validate_links.py
+
+quiz-test:
+	cd quiz && npm test
+
+clean:
+	@echo "The virtual environment and generated artifacts are intentionally not removed automatically."

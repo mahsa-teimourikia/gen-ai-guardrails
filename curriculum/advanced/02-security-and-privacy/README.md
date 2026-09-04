@@ -1,5 +1,18 @@
 # Security and privacy
 
+**Level:** Advanced  
+**Estimated time:** 45–60 minutes  
+**Prerequisites:** [Evaluation and red teaming](../01-evaluation-and-red-teaming/README.md)  
+**Notebook:** planned (see [ROADMAP.md](../../../ROADMAP.md))
+
+## Learning objectives
+
+- Identify threats to models and distinguish authorization from a guardrail score.
+- Defend trust boundaries against prompt injection.
+- Handle PII, sensitive data, secrets, and logs responsibly.
+- Secure tools, agents, models, and detector supply chains.
+- Plan privacy-preserving evaluation and incident response.
+
 Guardrails are part of an application security architecture. They should complement authentication, authorization, network isolation, secrets management, data governance, and incident response.
 
 ## Threats to model

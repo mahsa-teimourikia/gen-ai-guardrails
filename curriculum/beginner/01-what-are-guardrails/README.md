@@ -1,5 +1,18 @@
 # What are GenAI guardrails?
 
+**Level:** Beginner  
+**Estimated time:** 45–60 minutes  
+**Prerequisites:** None  
+**Notebook:** planned (see [ROADMAP.md](../../../ROADMAP.md))
+
+## Learning objectives
+
+- Explain the operating-envelope model.
+- Distinguish input, retrieval, dialog, execution, output, and operational rails.
+- Compare deterministic and model-based controls.
+- Choose between fail-open and fail-closed behavior.
+- Describe why guardrails fail and use a layered mental model.
+
 Guardrails are controls that constrain, validate, observe, and recover generative AI behavior. They can inspect a request before model inference, retrieved context before it enters a prompt, tool calls before execution, and model output before it reaches a user or external system.
 
 A guardrail is not the same as a refusal prompt. Prompts influence a model; guardrails enforce policy at a boundary the application controls. A robust system combines both.

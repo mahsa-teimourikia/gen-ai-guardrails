@@ -1,5 +1,18 @@
 # Scenario cookbook
 
+**Level:** Intermediate  
+**Estimated time:** 45–60 minutes  
+**Prerequisites:** [Best practices for production guardrails](../01-best-practices/README.md)  
+**Notebook:** planned (see [ROADMAP.md](../../../ROADMAP.md))  
+**Examples:** [`examples/`](examples/)
+
+## Learning objectives
+
+- Apply guardrail patterns to customer-support and data-extraction scenarios.
+- Design controls for agents that write to external systems.
+- Build a content-moderation gateway with explicit policy outcomes.
+- Use the release checklist to review scenario-specific controls.
+
 Use these compact patterns to translate the policy guidance into an implementation plan. Adapt the thresholds, owners, and failure behavior to your risk register; the snippets are deliberately provider-neutral.
 
 ## Customer-support assistant
@@ -69,4 +82,4 @@ Run a fast deterministic check first (size, MIME type, tenant, rate limit), then
 - [ ] Synthetic adversarial cases and regression tests are in CI.
 - [ ] Logs are useful but minimized, access-controlled, and retention-limited.
 
-See the [best-practices guide](best-practices.md), [security and privacy guide](security-and-privacy.md), and [evaluation guide](evaluation-and-red-teaming.md) for the rationale and references.
+See the [best-practices guide](../01-best-practices/README.md), [security and privacy guide](../../advanced/02-security-and-privacy/README.md), and [evaluation guide](../../advanced/01-evaluation-and-red-teaming/README.md) for the rationale and references.
