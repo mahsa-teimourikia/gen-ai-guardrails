@@ -100,6 +100,7 @@ On Windows, create and activate a virtual environment manually with `py -3.11 -m
 | --- | --- |
 | Python tests | `make test` |
 | Internal links | `make links` |
+| Execute notebooks | `make notebooks` |
 | Quiz tests | `make quiz-test` |
 | Python syntax | `python -m compileall -q curriculum tests` |
 

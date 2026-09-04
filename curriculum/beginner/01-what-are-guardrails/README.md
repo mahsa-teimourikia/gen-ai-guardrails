@@ -3,15 +3,16 @@
 **Level:** Beginner  
 **Estimated time:** 45–60 minutes  
 **Prerequisites:** None  
-**Notebook:** planned (see [ROADMAP.md](../../../ROADMAP.md))
+**Notebook:** [what_are_guardrails.ipynb](what_are_guardrails.ipynb)  
+**Scenario:** Internal HR/IT support assistant
 
 ## Learning objectives
 
-- Explain the operating-envelope model.
-- Distinguish input, retrieval, dialog, execution, output, and operational rails.
-- Compare deterministic and model-based controls.
-- Choose between fail-open and fail-closed behavior.
-- Describe why guardrails fail and use a layered mental model.
+- Define an operating envelope and inspect its policy records in section 1.
+- Classify input, retrieval, execution, and output decisions in sections 2–5.
+- Compare deterministic and heuristic controls using the detector outage in section 6.
+- Explain why ordering matters by reproducing a side effect before authorization in section 7.
+- Read audit-safe decision records and compare labeled requests in section 8.
 
 Guardrails are controls that constrain, validate, observe, and recover generative AI behavior. They can inspect a request before model inference, retrieved context before it enters a prompt, tool calls before execution, and model output before it reaches a user or external system.
 
@@ -29,7 +30,7 @@ For each policy, write:
 
 - **scope:** which users, tools, data, and modalities it covers;
 - **signal:** what the detector observes;
-- **decision:** allow, transform, block, retry, abstain, or escalate;
+- **decision:** allow, transform, block, abstain, or escalate;
 - **owner:** who is accountable for the policy;
 - **evidence:** what makes the decision auditable; and
 - **exception:** when a human or higher-trust path may override it.
@@ -42,25 +43,37 @@ Run before the model sees user content. Common checks include abuse, self-harm, 
 
 Input rails are useful but cannot see hidden instructions in retrieved documents or tool results. Never treat them as the only injection defense.
 
+In this lab, the assistant authenticates an employee before it considers an HR or IT request; input checks still cannot authorize a payroll change.
+
 ### Retrieval rails
 
 Run after retrieval and before context construction. Verify authorization, tenant scope, source provenance, freshness, relevance, PII policy, and malicious instructions. Retrieval rails are essential for RAG applications because a relevant document can still be unauthorized or adversarial.
+
+In this lab, a north employee's retrieval is filtered before context construction, and a poisoned salary note is quarantined with provenance retained.
 
 ### Dialog and policy rails
 
 Maintain policy state across turns: consent, topic boundaries, escalation, age or jurisdiction constraints, and required disclosures. State belongs in application code or a controlled policy runtime, not only in a long system prompt.
 
+In this lab, the support assistant's topic and escalation state remain application-controlled rather than being delegated to the model.
+
 ### Execution rails
 
-Guard tool calls and agent actions. Validate the tool name, schema, identity, target, amount, scope, side effect, and approval requirement before execution. Validate the result after execution and reconcile uncertain writes.
+Guard tool calls and agent actions. Validate the tool name, schema, identity, target, amount, scope, side effect, and approval requirement before execution. Validate the result after execution and reconcile uncertain writes; retry is a recovery action, not a typed decision.
+
+In this lab, `read_ticket` is allowed while payroll adjustments require an HR administrator and human approval before execution.
 
 ### Output rails
 
 Inspect the generated response for policy violations, unsafe content, PII, secrets, unsupported claims, schema failures, and missing citations. Decide whether to pass, redact, rewrite, abstain, or escalate.
 
+In this lab, the output rail redacts synthetic PII and abstains when a claim cites nothing or cites a document that was not retrieved.
+
 ### Operational rails
 
 Rate limits, budgets, timeouts, concurrency, tracing, audit records, kill switches, and incident procedures prevent safe-looking model behavior from becoming an unsafe production system.
+
+In this lab, decision records provide audit evidence, and fail-open or fail-closed behavior is selected per policy; retry remains a recovery action.
 
 ## Deterministic versus model-based controls
 
@@ -105,9 +118,40 @@ policy → observe → decide → constrain → execute → verify → learn
 
 The model is one component in that loop. It is not the policy engine, identity provider, transaction manager, or audit log.
 
+## What a decision record looks like
+
+```json
+{
+  "rail": "execution",
+  "policy_id": "tool-authorization",
+  "decision": "block",
+  "reasons": ["write_not_authorized"],
+  "identity_hash": "sha256(user-id)",
+  "correlation_id": "synthetic-correlation-id",
+  "detector_version": "deterministic-v1",
+  "metadata": {}
+}
+```
+
+Log reason codes and policy results. Never log hidden reasoning or raw sensitive input; hash or redact it.
+
+## Exercises
+
+1. Write a new `PolicyRecord` for an unlisted risk.
+2. Flip one rail's `on_error` value and predict the outcome before running.
+3. Move the role check into a system prompt string and show the pipeline no longer blocks the unauthorized write.
+
+## Setup
+
+Run the lab using the root README's [Run locally](../../../README.md#run-locally) instructions.
+
+## Where this fits
+
+Next, continue with [Course 02: Guardrail lifecycle](../02-guardrail-lifecycle/README.md) to turn policy decisions into an operational lifecycle.
+
 ## Sources
 
 - [NIST AI RMF Generative AI Profile](https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf)
 - [OWASP Top 10 for LLM Applications](https://genai.owasp.org/llm-top-10/)
-- [NVIDIA NeMo Guardrails overview](https://docs.nvidia.com/nemo/guardrails/about-nemo-guardrails-library/overview)
-- [NVIDIA NeMo Guardrails rail types](https://docs.nvidia.com/nemo/guardrails/about-nemo-guardrails-library/rail-types)
+- [NVIDIA NeMo Guardrails overview (vendor documentation; terminology comparison)](https://docs.nvidia.com/nemo/guardrails/about-nemo-guardrails-library/overview)
+- [NVIDIA NeMo Guardrails rail types (vendor documentation; terminology comparison)](https://docs.nvidia.com/nemo/guardrails/about-nemo-guardrails-library/rail-types)
