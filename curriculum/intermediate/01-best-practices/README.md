@@ -3,15 +3,17 @@
 **Level:** Intermediate  
 **Estimated time:** 45–60 minutes  
 **Prerequisites:** [The guardrail lifecycle](../../beginner/02-guardrail-lifecycle/README.md)  
-**Notebook:** planned (see [ROADMAP.md](../../../ROADMAP.md))
+**Notebook:** [best_practices.ipynb](best_practices.ipynb)  
+**Scenario:** Internal HR/IT support assistant
 
 ## Learning objectives
 
-- Start with a risk register and separate policy from implementation.
-- Design boundary controls, defense in depth, and failure handling.
-- Protect untrusted content, tools, data, and the guardrail itself.
-- Version, evaluate, and operate controls with budgets and circuit breakers.
-- Keep humans involved where consequences require them and maintain an incident playbook.
+- Load and validate an HR/IT risk register, then map policy statements to enforcement layers in sections 1–2.
+- Exercise budgets, circuit breakers, and safe detector failure behavior in section 3.
+- Review safety-critical guardrail changes and distinguish them from ordinary prompt-copy changes in section 4.
+- Require every evaluation layer, not only a high benchmark score, in section 5.
+- Validate a human-review packet and turn a system manifest into an evidence-backed release gate in sections 6–7.
+- Summarize the deterministic simulation and extend it with the exercises in section 8.
 
 ## 1. Start with a risk register
 
@@ -85,3 +87,19 @@ The playbook should cover credential revocation, workflow or model rollback, pol
 - [ ] Budgets, timeouts, rate limits, and kill switches are configured.
 - [ ] Policy changes require review and can be rolled back.
 - [ ] Incident response and appeal paths are tested.
+
+The lab evaluates each item against a system manifest and reports the evidence path it inspected; see `ReleaseGate`.
+
+## Exercises
+
+1. Add a risk-register row for a new HR/IT asset and decide whether its residual risk needs explicit acceptance.
+2. Add a safety-critical change with an authorized reviewer, then compare it with a prompt-copy change.
+3. Repair the adversarial evaluation regression and the three failing manifest items, then explain why the benchmark score alone was insufficient.
+
+## Setup
+
+Run the lab using the root README's [Run locally](../../../README.md#run-locally) instructions.
+
+## Where this fits
+
+Continue with the [scenario cookbook](../02-scenario-cookbook/README.md) to adapt these release practices to concrete trust boundaries and consequences.
