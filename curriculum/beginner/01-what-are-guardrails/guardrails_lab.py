@@ -144,6 +144,7 @@ DEFAULT_DETECTORS: dict[str, Detector] = {
 
 _EMAIL = re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b")
 _SSN = re.compile(r"\b\d{3}-\d{2}-\d{4}\b")
+_CITATION = re.compile(r"\[(doc-[A-Za-z0-9_-]+)\]")
 _WRITE_TOOLS = {"issue_payroll_adjustment"}
 _ALLOWED_TOOLS = {"read_ticket", "issue_payroll_adjustment"}
 
@@ -357,7 +358,10 @@ def guard_output(
     evidence_docs: list[Document],
     policies: list[PolicyRecord],
 ) -> DecisionRecord:
-    """Redact PII and abstain from explicitly unsupported claims."""
+    """Redact PII and bind claims to retrieved document citations."""
+    evidence_ids = [doc.doc_id for doc in evidence_docs]
+    citations = _CITATION.findall(text)
+    grounding_metadata = {"citations": citations, "evidence_ids": evidence_ids}
     if _EMAIL.search(text) or _SSN.search(text):
         redacted = _EMAIL.sub("[REDACTED]", _SSN.sub("[REDACTED]", text))
         return _record(
@@ -366,11 +370,18 @@ def guard_output(
             Decision.TRANSFORM,
             ["sensitive_data"],
             None,
-            metadata={"redacted": True, "redacted_text": redacted, "evidence_count": len(evidence_docs)},
+            metadata={**grounding_metadata, "redacted": True, "redacted_text": redacted},
         )
-    if "unsupported claim" in text.lower() or "without evidence" in text.lower():
-        return _record("output", "output-groundedness", Decision.ABSTAIN, ["unsupported_claim"], None, metadata={"evidence_count": len(evidence_docs)})
-    return _record("output", "output-sensitive-data", Decision.ALLOW, [], None, metadata={"evidence_count": len(evidence_docs)})
+    if not citations or any(citation not in evidence_ids for citation in citations):
+        return _record("output", "output-groundedness", Decision.ABSTAIN, ["unsupported_claim"], None, metadata=grounding_metadata)
+    return _record("output", "output-groundedness", Decision.ALLOW, [], None, metadata=grounding_metadata)
+
+
+def request_text(request: dict[str, Any]) -> str:
+    """Materialize a fixture request's text, including synthetic oversized input."""
+    if request.get("oversize"):
+        return "x" * 20_001
+    return request.get("text", "")
 
 
 def run_pipeline(
@@ -384,8 +395,7 @@ def run_pipeline(
 ) -> PipelineResult:
     """Run a request through input, retrieval, execution, and output rails."""
     records: list[DecisionRecord] = []
-    input_text = "x" * 20_001 if request.get("oversize") else request.get("text", "")
-    input_record = guard_input(input_text, identity, policies, detectors or DEFAULT_DETECTORS)
+    input_record = guard_input(request_text(request), identity, policies, detectors or DEFAULT_DETECTORS)
     records.append(input_record)
     if input_record.decision is not Decision.ALLOW:
         return PipelineResult(input_record.decision, input_record.rail, records)

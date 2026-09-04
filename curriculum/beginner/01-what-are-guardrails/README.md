@@ -3,7 +3,7 @@
 **Level:** Beginner  
 **Estimated time:** 45–60 minutes  
 **Prerequisites:** None  
-**Notebook:** [what_are_guardrails.ipynb](what_are_guardrails.ipynb)<br>
+**Notebook:** [what_are_guardrails.ipynb](what_are_guardrails.ipynb)  
 **Scenario:** Internal HR/IT support assistant
 
 ## Learning objectives
@@ -67,7 +67,7 @@ In this lab, `read_ticket` is allowed while payroll adjustments require an HR ad
 
 Inspect the generated response for policy violations, unsafe content, PII, secrets, unsupported claims, schema failures, and missing citations. Decide whether to pass, redact, rewrite, abstain, or escalate.
 
-In this lab, the output rail redacts synthetic PII and abstains when the response contains an unsupported claim.
+In this lab, the output rail redacts synthetic PII and abstains when a claim cites nothing or cites a document that was not retrieved.
 
 ### Operational rails
 

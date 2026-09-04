@@ -94,11 +94,11 @@
   },
   {
     "id": "req-11",
-    "description": "An explicitly unsupported claim is withheld",
+    "description": "Claim cites a document that is not in the evidence",
     "identity": {"user_id": "user-1011", "role": "employee", "business_unit": "bu-north", "authenticated": true},
     "text": "Can you verify this claim?",
     "retrieved_doc_ids": ["doc-001"],
-    "output_text": "This unsupported claim is presented without evidence.",
+    "output_text": "This claim cites a document that was not retrieved [doc-007].",
     "expected_decision": "abstain",
     "expected_rail": "output"
   },
@@ -108,7 +108,7 @@
     "identity": {"user_id": "user-1012", "role": "employee", "business_unit": "bu-north", "authenticated": true},
     "text": "How do I request VPN access?",
     "retrieved_doc_ids": ["doc-001"],
-    "output_text": "The handbook explains the VPN access request.",
+    "output_text": "The handbook explains the VPN access request [doc-001].",
     "expected_decision": "allow",
     "expected_rail": "output"
   },
@@ -130,5 +130,15 @@
     "retrieved_doc_ids": ["doc-002"],
     "expected_decision": "allow",
     "expected_rail": "execution"
+  },
+  {
+    "id": "req-15",
+    "description": "Answer with no citation is withheld",
+    "identity": {"user_id": "user-1015", "role": "employee", "business_unit": "bu-north", "authenticated": true},
+    "text": "How do I request VPN access?",
+    "retrieved_doc_ids": ["doc-001"],
+    "output_text": "The handbook explains the VPN access request.",
+    "expected_decision": "abstain",
+    "expected_rail": "output"
   }
 ]

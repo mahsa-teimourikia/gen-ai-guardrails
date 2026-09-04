@@ -19,7 +19,7 @@ jobs:
       - name: Install contributor tools
         run: python -m pip install -e '.[contributor]'
       - name: Register notebook kernel
-        run: .venv/bin/python -m ipykernel install --user --name python3
+        run: python -m ipykernel install --user --name python3
       - name: Run Python tests
         env:
           PYTHONPATH: .
