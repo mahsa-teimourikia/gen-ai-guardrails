@@ -32,18 +32,23 @@ class RiskEntry:
     accepted_by: str | None
 
 
-def load_risk_register(path: str | Path, appetite: int = 2) -> list[RiskEntry]:
+def load_risk_register(path: str | Path) -> list[RiskEntry]:
     """Load synthetic risk rows; validation is explicit via ``validate_risk_register``."""
-    del appetite
     return [RiskEntry(**row) for row in load_json(path)]
 
 
 def validate_risk_register(entries: list[RiskEntry], appetite: int) -> list[str]:
     issues: list[str] = []
     for entry in entries:
-        for field in ("owner", "control", "detector", "response"):
-            if not getattr(entry, field).strip():
-                issues.append(f"{entry.risk_id}: missing {field}")
+        required = {
+            "owner": entry.owner,
+            "control": entry.control,
+            "detector": entry.detector,
+            "response": entry.response,
+        }
+        for name, value in required.items():
+            if not value.strip():
+                issues.append(f"{entry.risk_id}: missing {name}")
         if entry.residual > appetite and not entry.accepted_by:
             issues.append(f"{entry.risk_id}: residual risk {entry.residual} exceeds appetite {appetite}")
     return issues
