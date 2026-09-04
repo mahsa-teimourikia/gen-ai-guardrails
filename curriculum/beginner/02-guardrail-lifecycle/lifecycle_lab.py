@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field, replace
+from dataclasses import asdict, dataclass, replace
 from enum import Enum
 import hashlib
 import json
@@ -289,20 +289,8 @@ def evaluate_would_be(traffic: list[TrafficItem], policy: Policy) -> Metrics:
 
 def compare(first: Metrics, second: Metrics) -> dict[str, float]:
     """Return second-minus-first deltas for every metric."""
-    return {
-        field_name: getattr(second, field_name) - getattr(first, field_name)
-        for field_name in (
-            "tp",
-            "fp",
-            "fn",
-            "tn",
-            "tpr",
-            "fpr",
-            "attempts_blocked",
-            "unsafe_completed",
-            "friction",
-        )
-    }
+    before = asdict(first)
+    return {name: value - before[name] for name, value in asdict(second).items()}
 
 
 def load_json(path: str | Path) -> Any:
