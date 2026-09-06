@@ -49,7 +49,6 @@ def stale_cells(notebook) -> list[str]:
 
 
 def run_one(path: Path) -> tuple[str, str]:
-    label = str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path)
     try:
         notebook = nbformat.read(path, as_version=4)
         stale = stale_cells(notebook)
