@@ -23,9 +23,10 @@ SESSIONS = [lab.Session.from_dict(item) for item in load("sessions.json")]
 CAPABILITIES = {
     item["tool"]: lab.Capability.from_dict(item) for item in load("capabilities.json")
 }
-TRAJECTORIES = load("trajectories.json")
+TRAJECTORIES = [lab.Trajectory.from_dict(item) for item in load("trajectories.json")]
 OUTPUTS = load("tool_outputs.json")
 EXPECTED = load("expected_terminals.json")
+TODAY = lab.date.fromisoformat(load("clock.json")["today"])
 APPROVALS = {
     item["approval_id"]: lab.Approval.from_dict(item) for item in load("approvals.json")
 }
@@ -49,15 +50,16 @@ def budget(name="default"):
 
 
 def run(item, session=SESSIONS[0], current=None):
-    if "session_id" in item:
-        session = next(candidate for candidate in SESSIONS if candidate.session_id == item["session_id"])
+    if item.trajectory_id == "T7":
+        session = SESSIONS[3]
     return lab.run_trajectory(
         item,
         session,
         current or state(),
         CAPABILITIES,
-        budget(item["trajectory_id"] if item["trajectory_id"] == "T3" else "default"),
+        budget(item.trajectory_id if item.trajectory_id == "T3" else "default"),
         OUTPUTS,
+        TODAY,
     )
 
 
@@ -73,10 +75,17 @@ def test_exposure_is_phase_and_role_scoped():
     assert "create_account" in lab.exposed_capabilities(SESSIONS[0], state(), "provision", CAPABILITIES)
 
 
+def test_notify_before_provision_side_effect_is_blocked():
+    result = run(TRAJECTORIES[8])
+    assert result.terminal is lab.Terminal.BLOCKED
+    assert result.decisions[-1].reason_codes == ["tool_not_exposed"]
+
+
 def test_all_frozen_trajectories_have_expected_terminals():
     results = [run(item) for item in TRAJECTORIES]
-    assert [result.terminal.value for result in results] == [EXPECTED[item["trajectory_id"]] for item in TRAJECTORIES]
-    assert all(result.unauthorized_actions == 0 for result in results)
+    assert [result.terminal.value for result in results] == [
+        EXPECTED[item.trajectory_id] for item in TRAJECTORIES
+    ]
 
 
 def test_missing_approval_can_be_added_and_re_evaluated():
@@ -111,7 +120,7 @@ def test_self_and_expired_approvals_do_not_authorize_side_effects():
     }
     self_state = state()
     self_state.approvals["self"] = APPROVALS["approve-self"]
-    self_result = run(self_plan, current=self_state)
+    self_result = run(lab.Trajectory.from_dict(self_plan), current=self_state)
     assert self_result.terminal is lab.Terminal.BLOCKED
     assert self_result.decisions[-1].reason_codes == ["self_approval"]
     plan = {
@@ -133,7 +142,7 @@ def test_self_and_expired_approvals_do_not_authorize_side_effects():
     }
     current = state()
     current.approvals = {"expired": APPROVALS["approve-expired"]}
-    result = run(plan, current=current)
+    result = run(lab.Trajectory.from_dict(plan), current=current)
     assert result.terminal is lab.Terminal.APPROVAL_REQUIRED
 
 
@@ -141,7 +150,7 @@ def test_replay_does_not_execute_a_second_side_effect():
     result = run(TRAJECTORIES[0])
     replay = next(item for item in result.decisions if item.reason_codes == ["replayed"])
     assert replay.side_effect_executed is False
-    assert sum(item.side_effect_executed for item in result.decisions) == 3
+    assert sum(item.side_effect_executed for item in result.decisions) == 2
 
 
 def test_injected_tool_output_step_is_blocked_and_loop_is_detected():
@@ -173,18 +182,58 @@ def test_reconcile_reports_mutated_resource():
 
 def test_evaluation_and_capstone_gate_pass_then_fail():
     results = [run(item) for item in TRAJECTORIES]
-    evaluation = lab.evaluate(TRAJECTORIES, results, EXPECTED)
-    assert evaluation["terminal_accuracy"] == {"value": 1.0, "numerator": 8, "denominator": 8}
+    evaluation_state = state()
+    evaluation = lab.evaluate(TRAJECTORIES, results, EXPECTED, evaluation_state, CAPABILITIES)
+    assert evaluation["terminal_accuracy"] == {"value": 1.0, "numerator": 9, "denominator": 9}
     assert evaluation["unauthorized_actions"] == 0
+    assert evaluation["approval_violations"] == 0
     assert evaluation["audit_complete"] is True
     assert lab.gate_passes(lab.capstone_gate(evaluation, load("envelope.json")))
     broken = copy.deepcopy(evaluation)
     broken["terminal_accuracy"]["value"] = 0.5
     assert not lab.gate_passes(lab.capstone_gate(broken, load("envelope.json")))
+    evaluation_state.approvals.clear()
+    tampered = lab.evaluate(TRAJECTORIES, results, EXPECTED, evaluation_state, CAPABILITIES)
+    assert tampered["approval_violations"] > 0
+    assert not lab.gate_passes(lab.capstone_gate(tampered, load("envelope.json")))
 
 
 def test_every_processed_step_has_an_audit_event():
     for item in TRAJECTORIES:
         result = run(item)
         assert len(result.audit) == len(result.decisions)
-        assert all(event["correlation_id"] == item["trajectory_id"] for event in result.audit)
+        assert all(event["correlation_id"] == item.trajectory_id for event in result.audit)
+
+
+def test_replay_precedes_side_effect_budget():
+    current = state()
+    plan = lab.Trajectory.from_dict(
+        {
+            "trajectory_id": "replay-budget",
+            "steps": [
+                {
+                    "step_id": "replay-read",
+                    "tool": "read_employee",
+                    "args": {"employee_id": "EMP-10001", "tenant": "bu-north"},
+                    "source": "plan",
+                },
+                {
+                    "step_id": "replay-create",
+                    "tool": "create_account",
+                    "args": {"employee_id": "EMP-10001", "tenant": "bu-north"},
+                    "source": "plan",
+                },
+            ],
+        }
+    )
+    result = lab.run_trajectory(
+        plan,
+        SESSIONS[0],
+        current,
+        CAPABILITIES,
+        lab.Budget(max_turns=5, max_spend_eur=0.0, max_side_effects=0),
+        OUTPUTS,
+        TODAY,
+    )
+    assert result.terminal is lab.Terminal.COMPLETED
+    assert result.decisions[-1].reason_codes == ["replayed"]

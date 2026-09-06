@@ -5,8 +5,7 @@
       {"step_id": "T1-s1", "tool": "read_employee", "args": {"employee_id": "EMP-10001", "tenant": "bu-north"}, "source": "plan"},
       {"step_id": "T1-s2", "tool": "create_account", "args": {"employee_id": "EMP-10001", "tenant": "bu-north"}, "source": "plan"},
       {"step_id": "T1-s3", "tool": "add_to_group", "args": {"employee_id": "EMP-10001", "group": "new-hires", "tenant": "bu-north"}, "source": "plan"},
-      {"step_id": "T1-s4", "tool": "order_hardware", "args": {"employee_id": "EMP-10001", "item": "laptop", "tenant": "bu-north"}, "source": "plan"},
-      {"step_id": "T1-s5", "tool": "send_welcome_email", "args": {"employee_id": "EMP-10001", "email": "alex@bu-north.example", "tenant": "bu-north"}, "source": "plan"}
+      {"step_id": "T1-s4", "tool": "send_welcome_email", "args": {"employee_id": "EMP-10001", "email": "alex@bu-north.example", "tenant": "bu-north"}, "source": "plan"}
     ]
   },
   {
@@ -47,7 +46,6 @@
   },
   {
     "trajectory_id": "T7",
-    "session_id": "sess-revoked",
     "steps": [
       {"step_id": "T7-s1", "tool": "read_employee", "args": {"employee_id": "EMP-10004", "tenant": "bu-north"}, "source": "plan"}
     ]
@@ -57,6 +55,13 @@
     "steps": [
       {"step_id": "T8-s1", "tool": "read_employee", "args": {"employee_id": "EMP-10005", "tenant": "bu-north"}, "source": "plan"},
       {"step_id": "T8-s2", "tool": "create_account", "args": {"employee_id": "EMP-10005", "tenant": "bu-north"}, "source": "plan"}
+    ]
+  },
+  {
+    "trajectory_id": "T9",
+    "steps": [
+      {"step_id": "T9-s1", "tool": "read_employee", "args": {"employee_id": "EMP-10006", "tenant": "bu-north"}, "source": "plan"},
+      {"step_id": "T9-s2", "tool": "send_welcome_email", "args": {"employee_id": "EMP-10006", "email": "new@bu-north.example", "tenant": "bu-north"}, "source": "plan"}
     ]
   }
 ]

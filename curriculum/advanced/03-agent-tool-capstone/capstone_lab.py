@@ -33,32 +33,29 @@ ROLE_RANK = {"employee": 1, "manager": 2, "hr_admin": 3}
 PHASES = {"lookup", "provision", "notify"}
 
 
-class ReadEmployeeArgs(BaseModel):
+class ToolArgs(BaseModel):
     employee_id: str = Field(pattern=r"^EMP-\d{5}$")
     tenant: str
 
 
-class CreateAccountArgs(BaseModel):
-    employee_id: str = Field(pattern=r"^EMP-\d{5}$")
-    tenant: str
+class ReadEmployeeArgs(ToolArgs):
+    pass
 
 
-class AddToGroupArgs(BaseModel):
-    employee_id: str = Field(pattern=r"^EMP-\d{5}$")
+class CreateAccountArgs(ToolArgs):
+    pass
+
+
+class AddToGroupArgs(ToolArgs):
     group: str
-    tenant: str
 
 
-class OrderHardwareArgs(BaseModel):
-    employee_id: str = Field(pattern=r"^EMP-\d{5}$")
+class OrderHardwareArgs(ToolArgs):
     item: str
-    tenant: str
 
 
-class SendWelcomeEmailArgs(BaseModel):
-    employee_id: str = Field(pattern=r"^EMP-\d{5}$")
+class SendWelcomeEmailArgs(ToolArgs):
     email: str
-    tenant: str
 
 
 ARG_MODELS: dict[str, type[BaseModel]] = {
@@ -80,6 +77,16 @@ class Session:
     @classmethod
     def from_dict(cls, value: dict[str, Any]) -> "Session":
         return cls(**value)
+
+
+@dataclass
+class Trajectory:
+    trajectory_id: str
+    steps: list[dict[str, Any]]
+
+    @classmethod
+    def from_dict(cls, value: dict[str, Any]) -> "Trajectory":
+        return cls(value["trajectory_id"], list(value["steps"]))
 
 
 @dataclass
@@ -224,10 +231,8 @@ class RunResult:
     terminal: Terminal
     decisions: list[StepResult]
     audit: list[dict[str, Any]]
-    unauthorized_actions: int
     blocked_attempts: int
     spend_eur: float
-    approval_violations: int = 0
     processed_steps: int = 0
 
     @property
@@ -235,16 +240,11 @@ class RunResult:
         return len(self.audit) == self.processed_steps
 
 
-def _trajectory_parts(trajectory: Any) -> tuple[str, list[dict[str, Any]]]:
-    if isinstance(trajectory, dict):
-        return trajectory["trajectory_id"], trajectory["steps"]
-    return getattr(trajectory, "trajectory_id", "trajectory"), getattr(trajectory, "steps", trajectory)
-
-
 def _audit(
     trajectory_id: str,
     index: int,
     step: dict[str, Any],
+    session: Session,
     decision: Decision,
     reasons: list[str],
     fingerprint: str,
@@ -254,6 +254,9 @@ def _audit(
         "correlation_id": trajectory_id,
         "step_index": index,
         "tool": step["tool"],
+        "user_id": session.user_id,
+        "session_tenant": session.tenant,
+        "tenant": step.get("args", {}).get("tenant", session.tenant),
         "decision": decision.value,
         "reason_codes": list(reasons),
         "fingerprint": fingerprint,
@@ -319,20 +322,45 @@ def _verify_resource(
 
 
 def run_trajectory(
-    trajectory: Any,
+    trajectory: Trajectory,
     session: Session,
     state: AuthorizationState,
     capabilities: dict[str, Capability],
     budget: Budget,
     tool_outputs: dict[str, dict[str, Any]],
+    today: date,
 ) -> RunResult:
-    trajectory_id, steps = _trajectory_parts(trajectory)
+    trajectory_id, steps = trajectory.trajectory_id, trajectory.steps
     decisions: list[StepResult] = []
     audit: list[dict[str, Any]] = []
     loop_counts: dict[str, int] = {}
-    unauthorized_actions = blocked_attempts = approval_violations = 0
+    blocked_attempts = 0
     phase = "lookup"
     terminal = Terminal.COMPLETED
+
+    def record(
+        decision: StepResult,
+        new_terminal: Terminal | None = None,
+        spend: float = 0.0,
+    ) -> None:
+        nonlocal blocked_attempts, terminal
+        decisions.append(decision)
+        audit.append(
+            _audit(
+                trajectory_id,
+                index,
+                step,
+                session,
+                decision.decision,
+                decision.reason_codes,
+                decision.fingerprint,
+                spend,
+            )
+        )
+        if decision.decision is Decision.BLOCK:
+            blocked_attempts += 1
+        if new_terminal is not None:
+            terminal = new_terminal
 
     for index, step in enumerate(steps):
         step_id = step.get("step_id", f"{trajectory_id}-s{index + 1}")
@@ -343,46 +371,29 @@ def run_trajectory(
             budget.consume_turn()
         except BudgetExhausted as error:
             decision = _step(step_id, Decision.BLOCK, [error.reason], fingerprint)
-            decisions.append(decision)
-            audit.append(_audit(trajectory_id, index, step, decision.decision, decision.reason_codes, fingerprint))
-            blocked_attempts += 1
-            terminal = Terminal.BUDGET_EXHAUSTED
+            record(decision, Terminal.BUDGET_EXHAUSTED)
             break
         loop_counts[fingerprint] = loop_counts.get(fingerprint, 0) + 1
         if loop_counts[fingerprint] >= 3:
             decision = _step(step_id, Decision.BLOCK, ["loop_detected"], fingerprint)
-            decisions.append(decision)
-            audit.append(_audit(trajectory_id, index, step, decision.decision, decision.reason_codes, fingerprint))
-            blocked_attempts += 1
-            terminal = Terminal.LOOP_DETECTED
+            record(decision, Terminal.LOOP_DETECTED)
             break
         if step.get("source") == "tool_output":
             decision = _step(step_id, Decision.BLOCK, ["untrusted_step_source"], fingerprint)
-            decisions.append(decision)
-            audit.append(_audit(trajectory_id, index, step, decision.decision, decision.reason_codes, fingerprint))
-            blocked_attempts += 1
+            record(decision)
             continue
 
-        requested = capabilities.get(step["tool"])
-        if requested and requested.side_effect and requested.phase == "notify" and phase == "provision":
-            phase = "notify"
         exposed = exposed_capabilities(session, state, phase, capabilities)
         capability = exposed.get(step["tool"])
         if capability is None:
             decision = _step(step_id, Decision.BLOCK, ["tool_not_exposed"], fingerprint)
-            decisions.append(decision)
-            audit.append(_audit(trajectory_id, index, step, decision.decision, decision.reason_codes, fingerprint))
-            blocked_attempts += 1
-            terminal = Terminal.BLOCKED
+            record(decision, Terminal.BLOCKED)
             break
         try:
             validated = capability.arg_model.model_validate(args)
         except ValidationError:
             decision = _step(step_id, Decision.BLOCK, ["invalid_arguments"], fingerprint)
-            decisions.append(decision)
-            audit.append(_audit(trajectory_id, index, step, decision.decision, decision.reason_codes, fingerprint))
-            blocked_attempts += 1
-            terminal = Terminal.BLOCKED
+            record(decision, Terminal.BLOCKED)
             break
         trusted_role = state.user_roles.get(session.user_id, session.role)
         if session.session_id in state.revoked_sessions:
@@ -391,16 +402,13 @@ def run_trajectory(
             reasons = ["role_not_authorized"]
         elif session.tenant not in state.tenant_membership.get(session.user_id, []):
             reasons = ["tenant_membership"]
-        elif getattr(validated, "tenant") != session.tenant:
+        elif validated.tenant != session.tenant:
             reasons = ["cross_tenant"]
         else:
             reasons = []
         if reasons:
             decision = _step(step_id, Decision.BLOCK, reasons, fingerprint)
-            decisions.append(decision)
-            audit.append(_audit(trajectory_id, index, step, decision.decision, decision.reason_codes, fingerprint))
-            blocked_attempts += 1
-            terminal = Terminal.BLOCKED
+            record(decision, Terminal.BLOCKED)
             break
         if capability.side_effect:
             matching = [
@@ -408,14 +416,11 @@ def run_trajectory(
                 for approval in state.approvals.values()
                 if approval.step_fingerprint == fingerprint
                 and approval.tenant == session.tenant
-                and approval.expires >= date.today()
+                and approval.expires >= today
             ]
             if matching and any(approval.approved_by == session.user_id for approval in matching):
                 decision = _step(step_id, Decision.BLOCK, ["self_approval"], fingerprint)
-                decisions.append(decision)
-                audit.append(_audit(trajectory_id, index, step, decision.decision, decision.reason_codes, fingerprint))
-                blocked_attempts += 1
-                terminal = Terminal.BLOCKED
+                record(decision, Terminal.BLOCKED)
                 break
             if not matching:
                 decision = _step(
@@ -425,34 +430,23 @@ def run_trajectory(
                     fingerprint,
                     pending=fingerprint,
                 )
-                decisions.append(decision)
-                audit.append(_audit(trajectory_id, index, step, decision.decision, decision.reason_codes, fingerprint))
-                terminal = Terminal.APPROVAL_REQUIRED
+                record(decision, Terminal.APPROVAL_REQUIRED)
                 break
+            if fingerprint in state.receipts:
+                receipt = state.receipts[fingerprint]
+                decision = _step(step_id, Decision.ALLOW, ["replayed"], fingerprint, receipt.result)
+                record(decision)
+                continue
             try:
                 budget.consume_side_effect(capability.spend_eur)
             except BudgetExhausted as error:
                 decision = _step(step_id, Decision.BLOCK, [error.reason], fingerprint)
-                decisions.append(decision)
-                audit.append(_audit(trajectory_id, index, step, decision.decision, decision.reason_codes, fingerprint, capability.spend_eur))
-                blocked_attempts += 1
-                terminal = Terminal.BUDGET_EXHAUSTED
+                record(decision, Terminal.BUDGET_EXHAUSTED, capability.spend_eur)
                 break
-            if fingerprint in state.receipts:
-                budget.side_effects -= 1
-                budget.spend_eur -= capability.spend_eur
-                receipt = state.receipts[fingerprint]
-                decision = _step(step_id, Decision.ALLOW, ["replayed"], fingerprint, receipt.result)
-                decisions.append(decision)
-                audit.append(_audit(trajectory_id, index, step, decision.decision, decision.reason_codes, fingerprint))
-                continue
-        else:
-            receipt = None
         if not capability.side_effect:
             output = tool_outputs.get(step_id, {}).get("text", "")
             decision = _step(step_id, Decision.ALLOW, ["read"], fingerprint, output)
-            decisions.append(decision)
-            audit.append(_audit(trajectory_id, index, step, decision.decision, decision.reason_codes, fingerprint))
+            record(decision)
             phase = "provision"
             continue
         result = _apply_resource(capability.tool, args, state.resources)
@@ -461,14 +455,11 @@ def run_trajectory(
         mismatch = tool_outputs.get(step_id, {}).get("verify_mismatch", False)
         if mismatch or not _verify_resource(capability.tool, args, state.resources, result):
             decision = _step(step_id, Decision.ESCALATE, ["reconcile_required"], fingerprint, result, True)
-            decisions.append(decision)
-            audit.append(_audit(trajectory_id, index, step, decision.decision, decision.reason_codes, fingerprint, capability.spend_eur))
-            terminal = Terminal.RECONCILIATION_REQUIRED
+            record(decision, Terminal.RECONCILIATION_REQUIRED, capability.spend_eur)
             break
         decision = _step(step_id, Decision.ALLOW, ["executed", "verified"], fingerprint, result, True)
-        decisions.append(decision)
-        audit.append(_audit(trajectory_id, index, step, decision.decision, decision.reason_codes, fingerprint, capability.spend_eur))
-        if capability.phase == "notify":
+        record(decision, spend=capability.spend_eur)
+        if capability.phase == "provision":
             phase = "notify"
 
     return RunResult(
@@ -476,10 +467,8 @@ def run_trajectory(
         terminal,
         decisions,
         audit,
-        unauthorized_actions,
         blocked_attempts,
         budget.spend_eur,
-        approval_violations,
         len(decisions),
     )
 
@@ -505,14 +494,52 @@ def reconcile(state: AuthorizationState, receipts: dict[str, Receipt]) -> list[s
     return discrepancies
 
 
+def audit_side_effects(
+    results: list[RunResult],
+    state: AuthorizationState,
+    capabilities: dict[str, Capability],
+) -> dict[str, int]:
+    approval_violations = 0
+    unauthorized_actions = 0
+    for result in results:
+        for index, decision in enumerate(result.decisions):
+            if not decision.side_effect_executed:
+                continue
+            event = next(
+                event
+                for event in result.audit
+                if event["fingerprint"] == decision.fingerprint
+                and event["step_index"] == index
+            )
+            approved = any(
+                approval.step_fingerprint == decision.fingerprint
+                for approval in state.approvals.values()
+            )
+            if not approved:
+                approval_violations += 1
+            capability = capabilities[event["tool"]]
+            trusted_role = state.user_roles.get(event["user_id"])
+            if (
+                ROLE_RANK.get(trusted_role, 0) < ROLE_RANK.get(capability.min_role, 99)
+                or event["tenant"] != event["session_tenant"]
+            ):
+                unauthorized_actions += 1
+    return {
+        "unauthorized_actions": unauthorized_actions,
+        "approval_violations": approval_violations,
+    }
+
+
 def evaluate(
-    trajectories: list[Any],
+    trajectories: list[Trajectory],
     results: list[RunResult],
     expected: dict[str, Terminal | str],
+    state: AuthorizationState,
+    capabilities: dict[str, Capability],
 ) -> dict[str, Any]:
     matches = []
     for trajectory, result in zip(trajectories, results):
-        trajectory_id, _ = _trajectory_parts(trajectory)
+        trajectory_id = trajectory.trajectory_id
         expected_terminal = expected[trajectory_id]
         expected_terminal = Terminal(expected_terminal)
         matches.append(
@@ -525,10 +552,7 @@ def evaluate(
         )
     numerator = sum(item["match"] for item in matches)
     denominator = len(matches)
-    side_effects = sum(
-        decision.side_effect_executed for result in results for decision in result.decisions
-    )
-    approval_violations = sum(result.approval_violations for result in results)
+    evidence = audit_side_effects(results, state, capabilities)
     return {
         "matches": matches,
         "terminal_accuracy": {
@@ -536,10 +560,10 @@ def evaluate(
             "numerator": numerator,
             "denominator": denominator,
         },
-        "unauthorized_actions": sum(result.unauthorized_actions for result in results),
+        "unauthorized_actions": evidence["unauthorized_actions"],
         "blocked_attempts": sum(result.blocked_attempts for result in results),
-        "approval_violations": approval_violations,
-        "approval_compliance": side_effects == 0 or approval_violations == 0,
+        "approval_violations": evidence["approval_violations"],
+        "approval_compliance": evidence["approval_violations"] == 0,
         "audit_complete": all(result.audit_complete for result in results),
         "spend_eur": sum(result.spend_eur for result in results),
     }
