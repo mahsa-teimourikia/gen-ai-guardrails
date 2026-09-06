@@ -20,7 +20,7 @@ This track is for practitioners designing production guardrails, integrating too
 | Course | Main question | Core capability |
 | --- | --- | --- |
 | [01 — Best practices](01-best-practices/README.md) | How should controls be designed? | Turn the release checklist into an evidence-backed gate |
-| [02 — Scenario cookbook](02-scenario-cookbook/README.md) | How do controls vary by use case? | Compose controls for concrete trust boundaries and consequences |
+| [02 — Scenario cookbook](02-scenario-cookbook/README.md) | How do controls vary by use case? | Implement extraction, agent-write, and moderation recipes with tests |
 
 ### 01 — Best practices
 

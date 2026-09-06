@@ -3,21 +3,25 @@
 **Level:** Intermediate  
 **Estimated time:** 45–60 minutes  
 **Prerequisites:** [Best practices for production guardrails](../01-best-practices/README.md)  
-**Notebook:** planned (see [ROADMAP.md](../../../ROADMAP.md))  
+**Notebook:** [scenario_cookbook.ipynb](scenario_cookbook.ipynb)  
+**Scenario:** Internal HR/IT support assistant  
 **Examples:** [`examples/`](examples/)
 
 ## Learning objectives
 
-- Apply guardrail patterns to customer-support and data-extraction scenarios.
-- Design controls for agents that write to external systems.
-- Build a content-moderation gateway with explicit policy outcomes.
-- Use the release checklist to review scenario-specific controls.
+- Route typed expense claims through schema, invariant, and confidence checks in section 2.
+- Preview, authorize, budget, execute, verify, and reconcile agent writes in section 3.
+- Apply deterministic moderation prechecks and category outcomes, then compute FP/FN in section 4.
+- Fill a scenario-specific release checklist from lab evidence in section 5.
+- Extend the recipes with regression cases and explain their boundaries in section 6.
 
 Use these compact patterns to translate the policy guidance into an implementation plan. Adapt the thresholds, owners, and failure behavior to your risk register; the snippets are deliberately provider-neutral.
 
 ## Customer-support assistant
 
 Goal: answer from tenant-approved documents without leaking private data.
+
+In the lab: this support recipe is covered by the [Course 01 lab](../../beginner/01-what-are-guardrails/README.md).
 
 1. Authenticate the user and attach a tenant identifier.
 2. Filter retrieval by tenant and document ACL before ranking.
@@ -35,6 +39,8 @@ return output_rail(answer, require_citations=True, pii_policy="minimize")
 ## Data extraction pipeline
 
 Goal: turn documents into a typed record without silently accepting malformed or adversarial values.
+
+In the lab: `ExpenseClaimV2` rejects unknown fields, checks invariants, preserves spans, and routes low-confidence claims.
 
 - Keep the schema versioned and reject unknown fields where appropriate.
 - Validate ranges, enum values, units, and cross-field invariants deterministically.
@@ -68,9 +74,20 @@ flowchart LR
 
 Start with dry-run mode. Add an idempotency key, per-user spend and turn budgets, an allowlisted tool set, and an emergency kill switch before enabling writes.
 
+In the lab: `ProposedAction`, `approve_gate`, and `Executor` implement this sequence with receipts, budgets, and reconciliation.
+
 ## Content moderation gateway
 
 Run a fast deterministic check first (size, MIME type, tenant, rate limit), then a content classifier or provider safety API. Treat the result as a policy signal: block, transform, allow with warning, or escalate. Version the classifier and threshold, and measure false positives and false negatives by category.
+
+In the lab: frozen scores (not a live classifier) feed versioned thresholds after the prechecks.
+
+| Outcome | Meaning |
+| --- | --- |
+| Allow | No category crosses a configured warning threshold |
+| Transform | A category reaches the warning threshold; allow with a warning |
+| Escalate | A category reaches the escalation threshold and needs review |
+| Block | A category reaches the blocking threshold |
 
 ## Release checklist
 
@@ -83,3 +100,19 @@ Run a fast deterministic check first (size, MIME type, tenant, rate limit), then
 - [ ] Logs are useful but minimized, access-controlled, and retention-limited.
 
 See the [best-practices guide](../01-best-practices/README.md), [security and privacy guide](../../advanced/02-security-and-privacy/README.md), and [evaluation guide](../../advanced/01-evaluation-and-red-teaming/README.md) for the rationale and references.
+
+The `examples/guardrail_pipeline.py` file remains an ordering sketch: its detector helpers are stubs with constant results, while the implemented recipes live in `cookbook_lab.py`. The `examples/nemo-config.yml` file is illustrative vendor configuration, not a required runtime dependency.
+
+## Exercises
+
+1. Add an extraction candidate with no line items and predict the invariant route.
+2. Turn on the agent policy kill switch and explain which writes stop while reads remain available.
+3. Add a moderation category or threshold and update its per-category FP/FN regression test.
+
+## Setup
+
+Run the lab using the root README's [Run locally](../../../README.md#run-locally) instructions.
+
+## Where this fits
+
+Continue with [Evaluation and red teaming](../../advanced/01-evaluation-and-red-teaming/README.md) to turn these scenario cases into adversarial regression suites.

@@ -2,6 +2,8 @@
 
 Replace the detector and model functions with your chosen implementation.
 The important part is the ordering and the typed decisions, not the vendor.
+Detector helpers below are STUBS with constant results; the tests cover only
+the deterministic branches. See ../cookbook_lab.py for implemented recipes.
 """
 
 from dataclasses import dataclass, field
