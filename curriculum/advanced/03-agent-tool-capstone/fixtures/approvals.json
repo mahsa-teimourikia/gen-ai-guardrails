@@ -1,0 +1,58 @@
+[
+  {
+    "approval_id": "approve-create-1",
+    "step_fingerprint": "f8cb005d5df1e6f12577ced14fdef0289d32be0df4390d9a3ed5a36527f73e36",
+    "approved_by": "hr_bri",
+    "approver_role": "hr_admin",
+    "tenant": "bu-north",
+    "expires": "2027-01-01"
+  },
+  {
+    "approval_id": "approve-group-1",
+    "step_fingerprint": "3b6764432a0be73f33d83d933b329a74485f148c4326c1eb8b3398175c477ca5",
+    "approved_by": "hr_bri",
+    "approver_role": "hr_admin",
+    "tenant": "bu-north",
+    "expires": "2027-01-01"
+  },
+  {
+    "approval_id": "approve-order-1",
+    "step_fingerprint": "4d26980c5efab17011fc5e5ededac6e01630bb691a75807aefdc690f76235267",
+    "approved_by": "hr_bri",
+    "approver_role": "hr_admin",
+    "tenant": "bu-north",
+    "expires": "2027-01-01"
+  },
+  {
+    "approval_id": "approve-reconcile",
+    "step_fingerprint": "bc494777850f67b641915df09bf263881d4fd65324549397bc997b7070cc40f8",
+    "approved_by": "hr_bri",
+    "approver_role": "hr_admin",
+    "tenant": "bu-north",
+    "expires": "2027-01-01"
+  },
+  {
+    "approval_id": "approve-email-1",
+    "step_fingerprint": "720762696ee595c94b418f85ea3ace5fa574e24e22b46eda4e75ac417fea4e18",
+    "approved_by": "hr_bri",
+    "approver_role": "hr_admin",
+    "tenant": "bu-north",
+    "expires": "2027-01-01"
+  },
+  {
+    "approval_id": "approve-expired",
+    "step_fingerprint": "915540092deb779bc557dfbd87d7cdf8a99b5f47489cb141148aebf5f55218ae",
+    "approved_by": "hr_bri",
+    "approver_role": "hr_admin",
+    "tenant": "bu-north",
+    "expires": "2020-01-01"
+  },
+  {
+    "approval_id": "approve-self",
+    "step_fingerprint": "3f0a14a8fccff4de3d9c4ba2d5b4ae2db11b4c9ab71999253b460e6b817d4425",
+    "approved_by": "hr_alex",
+    "approver_role": "hr_admin",
+    "tenant": "bu-north",
+    "expires": "2027-01-01"
+  }
+]

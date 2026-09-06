@@ -1,0 +1,42 @@
+[
+  {
+    "tool": "read_employee",
+    "min_role": "employee",
+    "side_effect": false,
+    "phase": "lookup",
+    "spend_eur": 0.0,
+    "arg_model": "ReadEmployeeArgs"
+  },
+  {
+    "tool": "create_account",
+    "min_role": "hr_admin",
+    "side_effect": true,
+    "phase": "provision",
+    "spend_eur": 0.0,
+    "arg_model": "CreateAccountArgs"
+  },
+  {
+    "tool": "add_to_group",
+    "min_role": "hr_admin",
+    "side_effect": true,
+    "phase": "provision",
+    "spend_eur": 0.0,
+    "arg_model": "AddToGroupArgs"
+  },
+  {
+    "tool": "order_hardware",
+    "min_role": "hr_admin",
+    "side_effect": true,
+    "phase": "provision",
+    "spend_eur": 850.0,
+    "arg_model": "OrderHardwareArgs"
+  },
+  {
+    "tool": "send_welcome_email",
+    "min_role": "hr_admin",
+    "side_effect": true,
+    "phase": "notify",
+    "spend_eur": 0.0,
+    "arg_model": "SendWelcomeEmailArgs"
+  }
+]
