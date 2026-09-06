@@ -9,5 +9,6 @@ __pycache__/
 .env.*
 .env.local
 node_modules/
+out/
 .DS_Store
 .ipynb_checkpoints/

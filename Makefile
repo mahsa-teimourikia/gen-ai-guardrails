@@ -1,6 +1,6 @@
 PYTHON ?= python3
 
-.PHONY: help setup-learner setup-contributor test notebooks notebooks-changed links quiz-test clean
+.PHONY: help setup-learner setup-contributor test notebooks notebooks-changed links quiz-test pages clean
 
 help:
 	@echo "Available targets:"
@@ -11,6 +11,7 @@ help:
 	@echo "  notebooks-changed  Execute notebooks changed from origin/main"
 	@echo "  links              Validate internal Markdown and quiz links"
 	@echo "  quiz-test          Run quiz tests"
+	@echo "  pages              Build and smoke test the Learning Hub"
 	@echo "  clean              Show cleanup guidance"
 
 setup-learner:
@@ -37,6 +38,10 @@ links:
 
 quiz-test:
 	cd quiz && npm test
+
+pages:
+	npm run check:pages-links
+	npm run test:pages
 
 clean:
 	@echo "The virtual environment and generated artifacts are intentionally not removed automatically."

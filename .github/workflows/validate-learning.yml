@@ -32,3 +32,8 @@ jobs:
       - name: Run quiz tests
         working-directory: quiz
         run: npm test
+      - name: Build and smoke test Learning Hub
+        run: |
+          npm ci
+          npm run check:pages-links
+          npm run test:pages

@@ -4,7 +4,15 @@ on:
   push:
     branches: [main]
     paths:
+      - "app/**"
+      - "github-pages/**"
       - "quiz/**"
+      - "assets/**"
+      - "scripts/*.mjs"
+      - "tests/*.mjs"
+      - "package.json"
+      - "package-lock.json"
+      - "vite.pages.config.ts"
       - ".github/workflows/deploy-pages.yml"
   workflow_dispatch:
 
@@ -18,29 +26,34 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: quiz
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm test
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Validate Learning Hub links
+        run: npm run check:pages-links
+      - name: Run quiz tests
+        run: npm run test
+      - name: Build and smoke test static site
+        run: npm run test:pages
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./out
 
   deploy:
-    needs: test
+    needs: build
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v4
-        with:
-          path: quiz
       - id: deployment
         uses: actions/deploy-pages@v4

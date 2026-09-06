@@ -31,7 +31,7 @@ This repository explains the concepts from first principles, provides scenario r
 3. Work through [best practices](curriculum/intermediate/01-best-practices/README.md) before choosing a framework.
 4. Pick a recipe in the [scenario cookbook](#scenario-cookbook) and adapt its policy, failure response, and tests.
 5. Study [evaluation and red teaming](curriculum/advanced/01-evaluation-and-red-teaming/README.md) with a representative adversarial dataset.
-6. Take the [interactive GenAI Guardrails Knowledge Check](https://mahsa-teimourikia.github.io/gen-ai-guardrails/).
+6. [Open the Learning Hub →](https://mahsa-teimourikia.github.io/gen-ai-guardrails/) and take the [interactive GenAI Guardrails Knowledge Check](https://mahsa-teimourikia.github.io/gen-ai-guardrails/quiz/).
 
 ## Guardrails visual model
 
@@ -93,6 +93,7 @@ cd gen-ai-guardrails
 make setup-contributor
 make test
 make quiz-test
+make pages
 ```
 
 On Windows, create and activate a virtual environment manually with `py -3.11 -m venv .venv`, activate `.venv\Scripts\activate`, and install with `python -m pip install -e ".[contributor]"`. Run the Makefile commands from Git Bash or use the equivalent Python and npm commands in PowerShell.
@@ -103,6 +104,7 @@ On Windows, create and activate a virtual environment manually with `py -3.11 -m
 | Internal links | `make links` |
 | Execute notebooks | `make notebooks` |
 | Quiz tests | `make quiz-test` |
+| Learning Hub | `make pages` |
 | Python syntax | `python -m compileall -q curriculum tests` |
 
 Use `make notebooks-changed` to execute only notebooks changed from `origin/main`.
@@ -202,7 +204,7 @@ Use [OWASP's LLM risks](https://genai.owasp.org/llm-top-10/), [OWASP agentic thr
 
 ## Interactive knowledge check
 
-Take the [GenAI Guardrails Knowledge Check](https://mahsa-teimourikia.github.io/gen-ai-guardrails/)—18 multiple-answer questions covering guardrail layers, policy design, injection, privacy, tools, evaluation, and operations. It grades exact answer sets, gives topic scores, reveals explanations on request, and stores progress only in the browser.
+Take the [GenAI Guardrails Knowledge Check](https://mahsa-teimourikia.github.io/gen-ai-guardrails/quiz/)—30 multiple-answer questions covering guardrail layers, policy design, injection, privacy, tools, evaluation, operations, and agent capstones. It grades exact answer sets, gives topic scores, reveals explanations on request, and stores progress only in the browser.
 
 ## Official and open-source resources
 
