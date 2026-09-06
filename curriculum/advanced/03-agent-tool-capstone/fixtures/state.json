@@ -1,0 +1,37 @@
+{
+  "user_roles": {
+    "hr_alex": "hr_admin",
+    "hr_bri": "hr_admin",
+    "employee-1": "employee",
+    "revoked-hr": "hr_admin"
+  },
+  "tenant_membership": {
+    "hr_alex": ["bu-north"],
+    "hr_bri": ["bu-south"],
+    "employee-1": ["bu-north"],
+    "revoked-hr": ["bu-north"]
+  },
+  "revoked_sessions": ["sess-revoked"],
+  "approvals": {},
+  "receipts": {
+    "f8cb005d5df1e6f12577ced14fdef0289d32be0df4390d9a3ed5a36527f73e36": {
+      "fingerprint": "f8cb005d5df1e6f12577ced14fdef0289d32be0df4390d9a3ed5a36527f73e36",
+      "event_id": "prior-create-1",
+      "result": {
+        "employee_id": "EMP-10001",
+        "tenant": "bu-north"
+      }
+    }
+  },
+  "resources": {
+    "accounts": {
+      "EMP-10001": {
+        "employee_id": "EMP-10001",
+        "tenant": "bu-north"
+      }
+    },
+    "groups": {},
+    "orders": {},
+    "welcome_emails": []
+  }
+}

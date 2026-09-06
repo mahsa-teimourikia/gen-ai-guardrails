@@ -1,0 +1,12 @@
+{
+  "default": {
+    "max_turns": 20,
+    "max_spend_eur": 1000.0,
+    "max_side_effects": 10
+  },
+  "T3": {
+    "max_turns": 10,
+    "max_spend_eur": 100.0,
+    "max_side_effects": 3
+  }
+}
