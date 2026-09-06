@@ -104,6 +104,8 @@ On Windows, create and activate a virtual environment manually with `py -3.11 -m
 | Quiz tests | `make quiz-test` |
 | Python syntax | `python -m compileall -q curriculum tests` |
 
+Use `make notebooks-changed` to execute only notebooks changed from `origin/main`.
+
 ## Guardrail layers
 
 | Layer | Question | Examples |
