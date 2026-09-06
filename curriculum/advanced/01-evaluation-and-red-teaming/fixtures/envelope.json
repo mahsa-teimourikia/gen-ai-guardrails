@@ -1,0 +1,4 @@
+{
+  "max_fnr_by_tier": {"low": 0.5, "medium": 0.25, "high": 0.2},
+  "p95_latency_ms": 180
+}

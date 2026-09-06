@@ -1,0 +1,5 @@
+{
+  "low": {"fn": 2.0, "fp": 1.0, "latency_per_ms": 0.01},
+  "medium": {"fn": 8.0, "fp": 1.5, "latency_per_ms": 0.01},
+  "high": {"fn": 30.0, "fp": 2.0, "latency_per_ms": 0.01}
+}

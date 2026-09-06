@@ -1,0 +1,6 @@
+{
+  "scope_env": "staging",
+  "approved_by": "guardrail-owner",
+  "expires": "2024-01-01",
+  "allowed_families": ["direct_jailbreak"]
+}

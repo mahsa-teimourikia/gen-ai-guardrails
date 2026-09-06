@@ -1,0 +1,11 @@
+{
+  "version": "1",
+  "detector": "detector_v1",
+  "threshold": 0.6,
+  "on_error": "fail_closed",
+  "allowed_tools": {
+    "read_ticket": "employee",
+    "create_ticket": "employee",
+    "issue_payroll_adjustment": "hr_admin"
+  }
+}
