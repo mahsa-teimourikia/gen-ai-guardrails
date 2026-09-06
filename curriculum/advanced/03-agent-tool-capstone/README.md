@@ -1,9 +1,9 @@
 # Agent and tool capstone
 
-**Level:** Advanced
-**Estimated time:** 60–90 minutes
-**Prerequisites:** [Security and privacy](../02-security-and-privacy/README.md) and [Scenario cookbook](../../intermediate/02-scenario-cookbook/README.md)
-**Notebook:** [agent and tool capstone lab](agent_tool_capstone.ipynb)
+**Level:** Advanced  
+**Estimated time:** 60–90 minutes  
+**Prerequisites:** [Security and privacy](../02-security-and-privacy/README.md) and [Scenario cookbook](../../intermediate/02-scenario-cookbook/README.md)  
+**Notebook:** [agent and tool capstone lab](agent_tool_capstone.ipynb)  
 **Scenario:** Internal HR/IT support assistant for new-hire onboarding
 
 ## Learning objectives
