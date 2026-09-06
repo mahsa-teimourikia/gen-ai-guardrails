@@ -109,6 +109,9 @@ def test_ops_metrics_uses_nearest_rank_and_tracks_outages():
 def test_grader_hierarchy_and_judge_calibration():
     tool_case = next(case for case in CASES if case.case_id == "tool-1")
     assert lab.grade(tool_case, next(result for result in V1_RESULTS if result.case_id == "tool-1"))[0] is lab.Grader.STATE
+    rule_case = next(case for case in CASES if case.case_id == "cross-1")
+    rule_result = next(result for result in V1_RESULTS if result.case_id == "cross-1")
+    assert lab.grade(rule_case, rule_result)[0] is lab.Grader.RULE
     judge_case = next(case for case in CASES if case.case_id == "pii-1")
     judge_result = next(result for result in V1_RESULTS if result.case_id == "pii-1")
     assert lab.grade(judge_case, judge_result, {"pii-1": lab.Decision.BLOCK})[0] is lab.Grader.JUDGE
@@ -158,6 +161,7 @@ def test_release_gate_fails_candidate_then_passes_after_threshold_and_trace_reme
     failed = lab.release_gate(CASES, V1_RESULTS, V2_RESULTS, envelope)
     assert not lab.release_gate_passes(failed)
     assert any(not passed for _, passed, _ in failed)
+    assert any(name == "output correctness (schema/groundedness proxy)" for name, _, _ in failed)
     selected = replace(POLICY_V2, threshold=0.5)
     repaired_cases = [
         replace(case, request={**case.request, "trace_dropped": False})
