@@ -6,7 +6,7 @@ import re
 
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]+\]\(([^)\s]+)\)")
 QUIZ_SOURCE = re.compile(r'source\s*:\s*\{[^}]*?url:\s*"([^"]+)"', re.DOTALL)
-EXCLUDED = {".git", ".venv", "node_modules"}
+EXCLUDED = {".git", ".venv", "node_modules", "out"}
 
 
 def validate_links(root: Path) -> list[str]:

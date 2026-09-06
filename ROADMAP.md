@@ -17,7 +17,7 @@ This repository is evolving from a curated guide into a progressive, runnable le
 3. **Red-team lab:** adversarial scenarios and regression tests for discovered failures.
 4. **Secure operation lab:** security, privacy, supply-chain, and incident-response controls with deterministic evidence.
 5. **Agent/tool capstone (delivered):** [`curriculum/advanced/03-agent-tool-capstone`](curriculum/advanced/03-agent-tool-capstone) demonstrates bounded tool use, authorization, approvals, budgets, receipts, and reconciliation.
-6. **Learning hub:** a browser-based companion for navigation and progress.
+6. **Learning hub (delivered):** [Open the browser-based companion](https://mahsa-teimourikia.github.io/gen-ai-guardrails/) for curriculum navigation, runnable-lab links, progress, and the full quiz.
 
 ## Definition of done
 

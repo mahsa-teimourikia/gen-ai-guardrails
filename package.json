@@ -1,0 +1,25 @@
+{
+  "name": "gen-ai-guardrails-learning-hub",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build:pages": "vite build --config vite.pages.config.ts && node scripts/copy-quiz-to-pages.mjs",
+    "check:pages-links": "node scripts/validate-learning-links.mjs",
+    "test:pages": "npm run build:pages && node tests/pages-smoke.mjs",
+    "test": "npm --prefix quiz test"
+  },
+  "dependencies": {
+    "react": "19.2.6",
+    "react-dom": "19.2.6"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.2",
+    "typescript": "5.9.3",
+    "vite": "8.0.13"
+  }
+}
