@@ -1,0 +1,11 @@
+{
+  "version": "moderation-policy.v1",
+  "max_chars": 500,
+  "allowed_mime": ["text/plain"],
+  "max_posts_in_window": 10,
+  "thresholds": {
+    "harassment": {"block": 0.8, "escalate": 0.6, "warn": 0.4},
+    "confidential_data": {"block": 0.75, "escalate": 0.5, "warn": 0.25},
+    "spam": {"block": 0.8, "escalate": 0.6, "warn": 0.3}
+  }
+}

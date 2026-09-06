@@ -1,0 +1,63 @@
+[
+  {
+    "id": "action-read",
+    "action": {
+      "action_id": "action-read",
+      "tool": "read_ticket",
+      "arguments": {"ticket_id": "ticket-101"},
+      "requester": {"user_id": "employee-001", "role": "employee"},
+      "approver": null,
+      "idempotency_key": "key-read-101"
+    },
+    "expected_decision": "allow"
+  },
+  {
+    "id": "action-create",
+    "action": {
+      "action_id": "action-create",
+      "tool": "create_ticket",
+      "arguments": {"title": "VPN access", "body": "Cannot connect"},
+      "requester": {"user_id": "employee-002", "role": "employee"},
+      "approver": null,
+      "idempotency_key": "key-create-102"
+    },
+    "expected_decision": "allow"
+  },
+  {
+    "id": "action-payroll-blocked",
+    "action": {
+      "action_id": "action-payroll-blocked",
+      "tool": "issue_payroll_adjustment",
+      "arguments": {"employee_id": "employee-003", "amount": 100},
+      "requester": {"user_id": "employee-003", "role": "employee"},
+      "approver": {"user_id": "manager-003", "role": "manager"},
+      "idempotency_key": "key-payroll-103"
+    },
+    "expected_decision": "block"
+  },
+  {
+    "id": "action-payroll-approved",
+    "action": {
+      "action_id": "action-payroll-approved",
+      "tool": "issue_payroll_adjustment",
+      "arguments": {"employee_id": "employee-004", "amount": 125},
+      "requester": {"user_id": "hr-004", "role": "hr_admin"},
+      "approver": {"user_id": "hr-approver", "role": "hr_admin"},
+      "idempotency_key": "key-payroll-104"
+    },
+    "expected_decision": "allow"
+  },
+  {
+    "id": "action-payroll-duplicate",
+    "action": {
+      "action_id": "action-payroll-duplicate",
+      "tool": "issue_payroll_adjustment",
+      "arguments": {"employee_id": "employee-004", "amount": 125},
+      "requester": {"user_id": "hr-004", "role": "hr_admin"},
+      "approver": {"user_id": "hr-approver", "role": "hr_admin"},
+      "idempotency_key": "key-payroll-104"
+    },
+    "expected_decision": "allow",
+    "expected_state_mismatch": true
+  }
+]
