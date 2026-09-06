@@ -72,9 +72,7 @@ def effective_authority(session: Session, contents: list[Content]) -> Session:
 
 
 def detect_injection(content: Content, scores: dict[str, float]) -> float:
-    if content.content_id in scores:
-        return float(scores[content.content_id])
-    return float(scores.get("injection_score", 0.0))
+    return float(scores[content.content_id])
 
 
 @dataclass
@@ -114,21 +112,16 @@ class AuthorizationState:
 
     @classmethod
     def from_dict(cls, value: dict[str, Any]) -> "AuthorizationState":
-        used_keys = value.get("used_idempotency_keys", {})
-        if isinstance(used_keys, list):
-            used_keys = {key: {} for key in used_keys}
         return cls(
-            user_roles=dict(value.get("user_roles", {})),
+            user_roles=dict(value["user_roles"]),
             tenant_membership={
                 user: list(tenants)
-                for user, tenants in value.get(
-                    "tenant_membership", value.get("tenant_memberships", {})
-                ).items()
+                for user, tenants in value["tenant_membership"].items()
             },
-            revoked_sessions=set(value.get("revoked_sessions", [])),
-            disabled_capabilities=set(value.get("disabled_capabilities", [])),
-            used_idempotency_keys=dict(used_keys),
-            revoked_credentials=list(value.get("revoked_credentials", [])),
+            revoked_sessions=set(value["revoked_sessions"]),
+            disabled_capabilities=set(value["disabled_capabilities"]),
+            used_idempotency_keys=dict(value["used_idempotency_keys"]),
+            revoked_credentials=list(value["revoked_credentials"]),
         )
 
     def revoke_session(self, session_id: str) -> None:
@@ -167,10 +160,8 @@ def _gate(
     return GateResult(decision, reasons, side_effect, event)
 
 
-def _capability(capabilities: dict[str, Capability] | list[Capability], tool: str) -> Capability | None:
-    if isinstance(capabilities, dict):
-        return capabilities.get(tool)
-    return next((item for item in capabilities if item.tool == tool), None)
+def _capability(capabilities: dict[str, Capability], tool: str) -> Capability | None:
+    return capabilities.get(tool)
 
 
 def _state_role(session: Session, state: AuthorizationState) -> str:
@@ -194,7 +185,7 @@ def _binding_checks(
     plan: ToolPlan,
     session: Session,
     state: AuthorizationState,
-    capabilities: dict[str, Capability] | list[Capability],
+    capabilities: dict[str, Capability],
 ) -> tuple[Capability | None, list[str]]:
     capability = _capability(capabilities, plan.tool)
     if capability is None:
@@ -219,7 +210,7 @@ def plan_check(
     plan: ToolPlan,
     session: Session,
     state: AuthorizationState,
-    capabilities: dict[str, Capability] | list[Capability],
+    capabilities: dict[str, Capability],
 ) -> GateResult:
     capability, reasons = _binding_checks(plan, session, state, capabilities)
     if reasons:
@@ -232,7 +223,7 @@ def execute(
     plan: ToolPlan,
     session: Session,
     state: AuthorizationState,
-    capabilities: dict[str, Capability] | list[Capability],
+    capabilities: dict[str, Capability],
     detector_score: float,
     threshold: float,
 ) -> GateResult:
@@ -308,6 +299,7 @@ class TokenVault:
     ttl_days: int
     allowed_roles: list[str]
     _tokens: dict[str, _Token] = field(default_factory=dict, init=False, repr=False)
+    _counter: int = field(default=0, init=False, repr=False)
 
     def tokenize(
         self,
@@ -317,26 +309,29 @@ class TokenVault:
     ) -> tuple[str, dict[str, str]]:
         masked = text
         tokens: dict[str, str] = {}
-        for index, entity in enumerate(sorted(entities, key=lambda item: item.span, reverse=True), start=1):
-            token = f"<{entity.kind.upper()}_TOKEN_{index}>"
+        assignments: dict[Entity, str] = {}
+        for entity in sorted(entities, key=lambda item: item.span):
+            self._counter += 1
+            assignments[entity] = f"<{entity.kind.upper()}_TOKEN_{self._counter}>"
+            tokens[assignments[entity]] = entity.value
+        for entity in sorted(entities, key=lambda item: item.span, reverse=True):
+            token = assignments[entity]
             masked = masked[: entity.span[0]] + token + masked[entity.span[1] :]
             self._tokens[token] = _Token(entity.value, now)
-            tokens[token] = entity.value
         return masked, tokens
 
     def detokenize(
         self,
         token: str,
-        session: Session | str,
+        session: Session,
         purpose: str,
         now: datetime,
     ) -> str:
-        role = session.role if isinstance(session, Session) else session
         record = self._tokens.get(token)
         if (
             record is None
             or purpose != self.purpose
-            or role not in self.allowed_roles
+            or session.role not in self.allowed_roles
             or now > record.created + timedelta(days=self.ttl_days)
         ):
             raise ReidentificationDenied(token)
@@ -427,17 +422,12 @@ class ArtifactManifest:
 
 
 def verify_artifacts(
-    manifest: list[ArtifactManifest] | dict[str, Any],
+    manifest: list[ArtifactManifest],
     actual: dict[str, str],
 ) -> list[str]:
-    entries = (
-        manifest
-        if isinstance(manifest, list)
-        else [ArtifactManifest.from_dict(item) for item in manifest.get("artifacts", [])]
-    )
     return [
         f"{item.name}:sha256_mismatch"
-        for item in entries
+        for item in manifest
         if actual.get(item.name) != item.sha256
     ]
 
@@ -495,7 +485,7 @@ def respond(
     incident: Incident,
     state: AuthorizationState,
     audit_log: AuditLog,
-    manifest: list[ArtifactManifest] | dict[str, Any],
+    manifest: list[ArtifactManifest],
     policy_version: str,
     detector_version: str,
 ) -> EvidenceBundle:
@@ -509,11 +499,6 @@ def respond(
     side_effects = [
         event["event_id"] for event in matching if event.get("side_effect")
     ]
-    entries = (
-        manifest
-        if isinstance(manifest, list)
-        else [ArtifactManifest.from_dict(item) for item in manifest.get("artifacts", [])]
-    )
     regression_case = {
         "case_id": f"{incident.incident_id}-regression",
         "capability": incident.capability,
@@ -527,7 +512,7 @@ def respond(
             "trigger_event_id": incident.trigger_event_id,
             "policy_version": policy_version,
             "detector_version": detector_version,
-            "artifact_hashes": {entry.name: entry.sha256 for entry in entries},
+            "artifact_hashes": {entry.name: entry.sha256 for entry in manifest},
             "audit_log_head_hash": audit_log.head_hash(),
         },
         blast_radius={

@@ -75,6 +75,14 @@ def test_detector_miss_does_not_bypass_gateway():
     assert result.reason_codes == ["role_not_authorized"]
 
 
+def test_authorized_manager_detector_signal_routes_to_review():
+    manager = SESSIONS[1]
+    plan = lab.ToolPlan("read_ticket", "tickets", {"ticket_id": "T-1"}, "bu-south", "read-score")
+    result = lab.execute(plan, manager, state(), CAPABILITIES, 0.9, 0.8)
+    assert result.decision is lab.Decision.ESCALATE
+    assert result.reason_codes == ["injection_suspected"]
+
+
 def test_binding_chain_blocks_tenant_resource_and_arguments_and_replays():
     employee = SESSIONS[0]
     current = state()
@@ -114,12 +122,20 @@ def test_pii_documents_miss_false_positive_and_scoped_vault():
     assert "ana@example.com" not in masked
     token = next(iter(tokens))
     assert vault.detokenize(token, SESSIONS[2], "ticket-routing", now) == tokens[token]
+    second_text = "Call +49 555 12345678."
+    second_masked, second_tokens = vault.tokenize(second_text, lab.detect_pii(second_text), now)
+    assert second_masked != masked
+    assert set(tokens).isdisjoint(second_tokens)
+    assert list(tokens)[0].endswith("_TOKEN_1>")
+    assert list(second_tokens)[0].endswith("_TOKEN_3>")
     with pytest.raises(lab.ReidentificationDenied):
         vault.detokenize(token, SESSIONS[2], "payroll", now)
     with pytest.raises(lab.ReidentificationDenied):
         vault.detokenize(token, SESSIONS[0], "ticket-routing", now)
     with pytest.raises(lab.ReidentificationDenied):
         vault.detokenize(token, SESSIONS[2], "ticket-routing", now + timedelta(days=3))
+    with pytest.raises(KeyError):
+        lab.detect_injection(lab.Content("missing", "text", "retrieved"), {})
     boundary = lab.external_call_boundary(text, vault, now)
     assert "ana@example.com" not in boundary
     assert "EMP-12345" not in boundary

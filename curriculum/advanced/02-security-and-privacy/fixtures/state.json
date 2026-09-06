@@ -13,6 +13,6 @@
   },
   "revoked_sessions": [],
   "disabled_capabilities": [],
-  "used_idempotency_keys": [],
+  "used_idempotency_keys": {},
   "revoked_credentials": []
 }
