@@ -1,6 +1,6 @@
 PYTHON ?= python3
 
-.PHONY: help setup-learner setup-contributor test notebooks links quiz-test clean
+.PHONY: help setup-learner setup-contributor test notebooks notebooks-changed links quiz-test clean
 
 help:
 	@echo "Available targets:"
@@ -8,6 +8,7 @@ help:
 	@echo "  setup-contributor  Create a contributor virtual environment"
 	@echo "  test               Run Python tests"
 	@echo "  notebooks          Execute curriculum notebooks"
+	@echo "  notebooks-changed  Execute notebooks changed from origin/main"
 	@echo "  links              Validate internal Markdown and quiz links"
 	@echo "  quiz-test          Run quiz tests"
 	@echo "  clean              Show cleanup guidance"
@@ -27,6 +28,9 @@ test:
 
 notebooks:
 	PYTHONPATH=. $(PYTHON) -m pytest -q tests/test_notebooks.py
+
+notebooks-changed:
+	PYTHONPATH=. $(PYTHON) scripts/run_notebooks.py --base origin/main
 
 links:
 	$(PYTHON) scripts/validate_links.py

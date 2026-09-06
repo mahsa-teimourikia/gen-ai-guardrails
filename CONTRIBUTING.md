@@ -51,6 +51,7 @@ Quiz questions must test concepts explained in the curriculum, have at least two
 | Python examples or tests | `make test` |
 | Internal curriculum links | `make links` |
 | Quiz or quiz sources | `make quiz-test` |
+| Changed notebooks | `make notebooks-changed` |
 | Python syntax | `python -m compileall -q curriculum tests` |
 
 Document exact checks and results in the pull request.
