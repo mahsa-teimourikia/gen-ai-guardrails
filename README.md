@@ -69,7 +69,7 @@ The curriculum progresses from understanding the control model, to designing con
 | Course | Main question | Core capability |
 | --- | --- | --- |
 | [Evaluation and red teaming](curriculum/advanced/01-evaluation-and-red-teaming/README.md) | How do we know controls work under attack? | Measure, calibrate, red-team, and gate a guardrail with tests |
-| [Security and privacy](curriculum/advanced/02-security-and-privacy/README.md) | How do we operate controls against threats? | Protect identities, data, tools, dependencies, and incident evidence |
+| [Security and privacy](curriculum/advanced/02-security-and-privacy/README.md) | How do we operate controls against threats? | Protect identities, data, tools, dependencies, and incident evidence with tests |
 
 See the complete [curriculum map](curriculum/README.md).
 

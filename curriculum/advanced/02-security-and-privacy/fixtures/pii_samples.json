@@ -1,0 +1,6 @@
+[
+  {"id":"email-and-id","text":"Contact ana@example.com for EMP-12345.","expected_kinds":["email","employee_id"]},
+  {"id":"phone-fp","text":"Order reference 1234567890 is ready.","expected_kinds":["phone"],"note":"rule-based phone heuristic is a documented false positive"},
+  {"id":"name-miss","text":"Escalate this to Priya Nair in payroll.","expected_kinds":[],"note":"free-text names are a documented detector miss"},
+  {"id":"iban","text":"Pay to DE89370400440532013000.","expected_kinds":["iban"]}
+]

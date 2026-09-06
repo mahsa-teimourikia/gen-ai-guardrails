@@ -1,0 +1,6 @@
+[
+  {"tool":"read_ticket","min_role":"employee","allowed_resources":["tickets"],"side_effect":false,"arg_schema":{"ticket_id":"str"}},
+  {"tool":"create_ticket","min_role":"employee","allowed_resources":["tickets"],"side_effect":true,"arg_schema":{"title":"str"}},
+  {"tool":"issue_payroll_adjustment","min_role":"hr_admin","allowed_resources":["payroll"],"side_effect":true,"arg_schema":{"employee_id":"str","amount":"float"}},
+  {"tool":"export_all","min_role":"hr_admin","allowed_resources":["reports"],"side_effect":true,"arg_schema":{"format":"str"}}
+]

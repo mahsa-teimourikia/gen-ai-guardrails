@@ -1,0 +1,6 @@
+{
+  "name":"synthetic-hr-it-eval-v1",
+  "synthetic":true,
+  "access_roles":["hr_admin","security_reviewer"],
+  "retention_days":30
+}

@@ -1,0 +1,6 @@
+[
+  {"user_id":"u-employee","tenant":"bu-north","role":"employee","clearance":"standard","session_id":"sess-employee"},
+  {"user_id":"u-manager","tenant":"bu-south","role":"manager","clearance":"confidential","session_id":"sess-manager"},
+  {"user_id":"u-admin","tenant":"bu-north","role":"hr_admin","clearance":"restricted","session_id":"sess-admin"},
+  {"user_id":"u-revoked","tenant":"bu-north","role":"manager","clearance":"confidential","session_id":"sess-revoked"}
+]
