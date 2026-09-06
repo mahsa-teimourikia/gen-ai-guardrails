@@ -1,0 +1,22 @@
+[
+  {"id": "post-01", "text": "harassment", "mime": "text/plain", "tenant_id": "tenant-a", "posts_in_window": 1, "labels": ["harassment"], "scores": {"harassment": 0.95, "confidential_data": 0.0, "spam": 0.0}},
+  {"id": "post-02", "text": "harassment", "mime": "text/plain", "tenant_id": "tenant-a", "posts_in_window": 1, "labels": ["harassment"], "scores": {"harassment": 0.9, "confidential_data": 0.0, "spam": 0.0}},
+  {"id": "post-03", "text": "harassment", "mime": "text/plain", "tenant_id": "tenant-a", "posts_in_window": 1, "labels": ["harassment"], "scores": {"harassment": 0.7, "confidential_data": 0.0, "spam": 0.0}},
+  {"id": "post-04", "text": "harassment", "mime": "text/plain", "tenant_id": "tenant-a", "posts_in_window": 1, "labels": ["harassment"], "scores": {"harassment": 0.5, "confidential_data": 0.0, "spam": 0.0}},
+  {"id": "post-05", "text": "harassment", "mime": "text/plain", "tenant_id": "tenant-a", "posts_in_window": 1, "labels": ["harassment"], "scores": {"harassment": 0.2, "confidential_data": 0.0, "spam": 0.0}},
+  {"id": "post-06", "text": "clean", "mime": "text/plain", "tenant_id": "tenant-a", "posts_in_window": 1, "labels": [], "scores": {"harassment": 0.7, "confidential_data": 0.0, "spam": 0.0}},
+  {"id": "post-07", "text": "clean", "mime": "text/plain", "tenant_id": "tenant-a", "posts_in_window": 1, "labels": [], "scores": {"harassment": 0.5, "confidential_data": 0.0, "spam": 0.0}},
+  {"id": "post-08", "text": "confidential", "mime": "text/plain", "tenant_id": "tenant-a", "posts_in_window": 1, "labels": ["confidential_data"], "scores": {"harassment": 0.0, "confidential_data": 0.9, "spam": 0.0}},
+  {"id": "post-09", "text": "confidential", "mime": "text/plain", "tenant_id": "tenant-a", "posts_in_window": 1, "labels": ["confidential_data"], "scores": {"harassment": 0.0, "confidential_data": 0.7, "spam": 0.0}},
+  {"id": "post-10", "text": "confidential", "mime": "text/plain", "tenant_id": "tenant-a", "posts_in_window": 1, "labels": ["confidential_data"], "scores": {"harassment": 0.0, "confidential_data": 0.1, "spam": 0.0}},
+  {"id": "post-11", "text": "confidential", "mime": "text/plain", "tenant_id": "tenant-a", "posts_in_window": 1, "labels": ["confidential_data"], "scores": {"harassment": 0.0, "confidential_data": 0.1, "spam": 0.0}},
+  {"id": "post-12", "text": "clean", "mime": "text/plain", "tenant_id": "tenant-a", "posts_in_window": 1, "labels": [], "scores": {"harassment": 0.0, "confidential_data": 0.7, "spam": 0.0}},
+  {"id": "post-13", "text": "spam", "mime": "text/plain", "tenant_id": "tenant-a", "posts_in_window": 1, "labels": ["spam"], "scores": {"harassment": 0.0, "confidential_data": 0.0, "spam": 0.9}},
+  {"id": "post-14", "text": "spam", "mime": "text/plain", "tenant_id": "tenant-a", "posts_in_window": 1, "labels": ["spam"], "scores": {"harassment": 0.0, "confidential_data": 0.0, "spam": 0.7}},
+  {"id": "post-15", "text": "spam", "mime": "text/plain", "tenant_id": "tenant-a", "posts_in_window": 1, "labels": ["spam"], "scores": {"harassment": 0.0, "confidential_data": 0.0, "spam": 0.5}},
+  {"id": "post-16", "text": "spam", "mime": "text/plain", "tenant_id": "tenant-a", "posts_in_window": 1, "labels": ["spam"], "scores": {"harassment": 0.0, "confidential_data": 0.0, "spam": 0.1}},
+  {"id": "post-17", "text": "spam", "mime": "text/plain", "tenant_id": "tenant-a", "posts_in_window": 1, "labels": ["spam"], "scores": {"harassment": 0.0, "confidential_data": 0.0, "spam": 0.1}},
+  {"id": "post-18", "text": "clean", "mime": "text/plain", "tenant_id": "tenant-a", "posts_in_window": 1, "labels": [], "scores": {"harassment": 0.0, "confidential_data": 0.0, "spam": 0.7}},
+  {"id": "post-19", "text": "clean", "mime": "text/plain", "tenant_id": "tenant-a", "posts_in_window": 1, "labels": [], "scores": {"harassment": 0.0, "confidential_data": 0.0, "spam": 0.5}},
+  {"id": "post-20", "text": "clean", "mime": "text/plain", "tenant_id": "tenant-a", "posts_in_window": 1, "labels": [], "scores": {"harassment": 0.0, "confidential_data": 0.0, "spam": 0.2}}
+]

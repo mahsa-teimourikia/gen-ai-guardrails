@@ -1,0 +1,4 @@
+{
+  "version": "extraction-policy.v1",
+  "min_field_confidence": 0.85
+}

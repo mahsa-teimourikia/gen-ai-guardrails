@@ -1,0 +1,12 @@
+{
+  "version": "agent-policy.v1",
+  "owner": "hr-it-platform-team",
+  "kill_switch": false,
+  "budgets": {"max_writes_per_session": 3},
+  "allowlist": {
+    "read_ticket": {"role": "employee", "approval_required": false},
+    "create_ticket": {"role": "employee", "approval_required": false},
+    "close_ticket": {"role": "manager", "approval_required": true},
+    "issue_payroll_adjustment": {"role": "hr_admin", "approval_required": true}
+  }
+}

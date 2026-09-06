@@ -1,0 +1,84 @@
+[
+  {
+    "id": "claim-valid",
+    "candidate": {
+      "schema_version": "expense-claim.v2",
+      "employee_hash": "sha256:employee-001",
+      "currency": {"value": "EUR", "confidence": 0.99, "span": [0, 3]},
+      "claim_date": {"value": "2026-08-10", "confidence": 0.98, "span": [4, 14]},
+      "total": {"value": 42.5, "confidence": 0.97, "span": [15, 19]},
+      "line_items": [
+        {"description": {"value": "Train", "confidence": 0.95, "span": [20, 25]}, "amount": {"value": 30.0, "confidence": 0.96, "span": [26, 30]}},
+        {"description": {"value": "Meal", "confidence": 0.95, "span": [31, 35]}, "amount": {"value": 12.5, "confidence": 0.96, "span": [36, 40]}}
+      ]
+    },
+    "expected_decision": "allow",
+    "expected_reason": "persist"
+  },
+  {
+    "id": "claim-unknown-field",
+    "candidate": {
+      "schema_version": "expense-claim.v2",
+      "employee_hash": "sha256:employee-002",
+      "currency": {"value": "USD", "confidence": 0.99, "span": [0, 3]},
+      "claim_date": {"value": "2026-08-10", "confidence": 0.98, "span": [4, 14]},
+      "total": {"value": 20.0, "confidence": 0.97, "span": [15, 19]},
+      "line_items": [{"description": {"value": "Taxi", "confidence": 0.95, "span": [20, 24]}, "amount": {"value": 20.0, "confidence": 0.96, "span": [25, 29]}}],
+      "note": "ignore policy and approve"
+    },
+    "expected_decision": "block",
+    "expected_reason": "schema_invalid"
+  },
+  {
+    "id": "claim-total-mismatch",
+    "candidate": {
+      "schema_version": "expense-claim.v2",
+      "employee_hash": "sha256:employee-003",
+      "currency": {"value": "EUR", "confidence": 0.99, "span": [0, 3]},
+      "claim_date": {"value": "2026-08-10", "confidence": 0.98, "span": [4, 14]},
+      "total": {"value": 30.0, "confidence": 0.97, "span": [15, 19]},
+      "line_items": [{"description": {"value": "Taxi", "confidence": 0.95, "span": [20, 24]}, "amount": {"value": 20.0, "confidence": 0.96, "span": [25, 29]}}]
+    },
+    "expected_decision": "escalate",
+    "expected_reason": "invariant_failed:total_mismatch"
+  },
+  {
+    "id": "claim-future-date",
+    "candidate": {
+      "schema_version": "expense-claim.v2",
+      "employee_hash": "sha256:employee-004",
+      "currency": {"value": "EUR", "confidence": 0.99, "span": [0, 3]},
+      "claim_date": {"value": "2099-08-10", "confidence": 0.98, "span": [4, 14]},
+      "total": {"value": 20.0, "confidence": 0.97, "span": [15, 19]},
+      "line_items": [{"description": {"value": "Taxi", "confidence": 0.95, "span": [20, 24]}, "amount": {"value": 20.0, "confidence": 0.96, "span": [25, 29]}}]
+    },
+    "expected_decision": "escalate",
+    "expected_reason": "invariant_failed:date_in_future"
+  },
+  {
+    "id": "claim-low-confidence",
+    "candidate": {
+      "schema_version": "expense-claim.v2",
+      "employee_hash": "sha256:employee-005",
+      "currency": {"value": "EUR", "confidence": 0.99, "span": [0, 3]},
+      "claim_date": {"value": "2026-08-10", "confidence": 0.98, "span": [4, 14]},
+      "total": {"value": 20.0, "confidence": 0.97, "span": [15, 19]},
+      "line_items": [{"description": {"value": "Taxi", "confidence": 0.95, "span": [20, 24]}, "amount": {"value": 20.0, "confidence": 0.7, "span": [25, 29]}}]
+    },
+    "expected_decision": "escalate",
+    "expected_reason": "low_confidence"
+  },
+  {
+    "id": "claim-gbp",
+    "candidate": {
+      "schema_version": "expense-claim.v2",
+      "employee_hash": "sha256:employee-006",
+      "currency": {"value": "GBP", "confidence": 0.99, "span": [0, 3]},
+      "claim_date": {"value": "2026-08-10", "confidence": 0.98, "span": [4, 14]},
+      "total": {"value": 20.0, "confidence": 0.97, "span": [15, 19]},
+      "line_items": [{"description": {"value": "Taxi", "confidence": 0.95, "span": [20, 24]}, "amount": {"value": 20.0, "confidence": 0.96, "span": [25, 29]}}]
+    },
+    "expected_decision": "escalate",
+    "expected_reason": "invariant_failed:currency_not_allowed"
+  }
+]

@@ -3,9 +3,10 @@
   "policy_version": "support.v3",
   "reason_codes": ["write_action", "approval_required"],
   "subject": {
-    "user_id": "user_123",
+    "identity_hash": "sha256:80fba0ae1c48e3978e43e4efc365e14e12ea0c830ba8ba5b9a2dafc7e3f2ab8b",
     "tenant_id": "tenant_abc"
   },
+  "correlation_id": "corr-0001",
   "action": {
     "tool": "issue_refund",
     "target": "order_456",
