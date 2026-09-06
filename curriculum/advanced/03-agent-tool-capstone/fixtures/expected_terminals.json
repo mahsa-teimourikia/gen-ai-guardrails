@@ -1,0 +1,11 @@
+{
+  "T1": "completed",
+  "T2": "approval_required",
+  "T3": "budget_exhausted",
+  "T4": "loop_detected",
+  "T5": "completed",
+  "T6": "blocked",
+  "T7": "blocked",
+  "T8": "reconciliation_required",
+  "T9": "blocked"
+}

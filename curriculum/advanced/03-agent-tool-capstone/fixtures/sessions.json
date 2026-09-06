@@ -1,0 +1,26 @@
+[
+  {
+    "user_id": "hr_alex",
+    "tenant": "bu-north",
+    "role": "hr_admin",
+    "session_id": "sess-alex"
+  },
+  {
+    "user_id": "hr_bri",
+    "tenant": "bu-south",
+    "role": "hr_admin",
+    "session_id": "sess-bri"
+  },
+  {
+    "user_id": "employee-1",
+    "tenant": "bu-north",
+    "role": "employee",
+    "session_id": "sess-employee"
+  },
+  {
+    "user_id": "revoked-hr",
+    "tenant": "bu-north",
+    "role": "hr_admin",
+    "session_id": "sess-revoked"
+  }
+]

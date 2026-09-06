@@ -15,7 +15,7 @@ This repository is evolving from a curated guide into a progressive, runnable le
 1. **Foundation (current):** curriculum restructure, lesson contract, and repository scaffolding.
 2. **Runnable lessons:** provider-neutral notebooks per lesson with deterministic fixtures.
 3. **Red-team lab:** adversarial scenarios and regression tests for discovered failures.
-4. **Agent/tool capstone:** bounded tool use, authorization, approvals, and reconciliation.
+4. **Agent/tool capstone (delivered):** [`curriculum/advanced/03-agent-tool-capstone`](curriculum/advanced/03-agent-tool-capstone) demonstrates bounded tool use, authorization, approvals, budgets, receipts, and reconciliation.
 5. **Learning hub:** a browser-based companion for navigation and progress.
 
 ## Definition of done

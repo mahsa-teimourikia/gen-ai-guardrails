@@ -82,3 +82,7 @@ Use synthetic or de-identified examples, minimize copied production content, res
 - [NIST AI RMF](https://www.nist.gov/itl/ai-risk-management-framework)
 - [NIST Privacy Framework](https://www.nist.gov/privacy-framework)
 - [MITRE ATLAS](https://atlas.mitre.org/)
+
+## Where this fits
+
+Continue to the [Agent and tool capstone](../03-agent-tool-capstone/README.md) to apply these security boundaries to bounded side effects.
