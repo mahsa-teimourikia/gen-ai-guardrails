@@ -1,0 +1,18 @@
+{
+  "user_roles": {
+    "u-employee": "employee",
+    "u-manager": "manager",
+    "u-admin": "hr_admin",
+    "u-revoked": "manager"
+  },
+  "tenant_membership": {
+    "u-employee": ["bu-north"],
+    "u-manager": ["bu-south"],
+    "u-admin": ["bu-north"],
+    "u-revoked": ["bu-north"]
+  },
+  "revoked_sessions": [],
+  "disabled_capabilities": [],
+  "used_idempotency_keys": {},
+  "revoked_credentials": []
+}

@@ -21,7 +21,7 @@ This track is for engineers, evaluators, and security practitioners responsible 
 | Course | Main question | Core capability |
 | --- | --- | --- |
 | [01 — Evaluation and red teaming](01-evaluation-and-red-teaming/README.md) | How do we know controls work under attack? | Measure, calibrate, red-team, and gate a guardrail with tests |
-| [02 — Security and privacy](02-security-and-privacy/README.md) | How do we operate controls against threats? | Protect identities, data, tools, dependencies, and incident evidence |
+| [02 — Security and privacy](02-security-and-privacy/README.md) | How do we operate controls against threats? | Protect identities, data, tools, dependencies, and incident evidence with tests |
 | [03 — Agent and tool capstone](03-agent-tool-capstone/README.md) | How do we bound agentic side effects? | Enforce approvals, budgets, receipts, and reconciliation |
 
 ### 01 — Evaluation and red teaming

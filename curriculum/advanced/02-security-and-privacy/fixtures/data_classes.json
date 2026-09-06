@@ -1,0 +1,6 @@
+[
+  {"name":"email","purpose":"ticket routing","retention_days":30,"residency":"EU","legal_basis":"contract"},
+  {"name":"phone","purpose":"employee verification","retention_days":7,"residency":"EU","legal_basis":"legitimate_interest"},
+  {"name":"employee_id","purpose":"HR case lookup","retention_days":90,"residency":"EU","legal_basis":"employment"},
+  {"name":"iban","purpose":"payroll processing","retention_days":30,"residency":"EU","legal_basis":"employment"}
+]

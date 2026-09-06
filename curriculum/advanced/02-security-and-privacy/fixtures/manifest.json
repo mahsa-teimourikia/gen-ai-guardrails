@@ -1,0 +1,5 @@
+[
+  {"name":"injection-detector","version":"2.1.0","sha256":"aaa111"},
+  {"name":"policy-bundle","version":"2026.09","sha256":"bbb222"},
+  {"name":"pii-rules","version":"1.4.0","sha256":"ccc333"}
+]
