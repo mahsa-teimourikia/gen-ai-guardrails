@@ -1,0 +1,17 @@
+{
+  "scope_env": "staging",
+  "approved_by": "guardrail-owner",
+  "expires": "2027-01-01",
+  "allowed_families": [
+    "direct_jailbreak",
+    "indirect_injection",
+    "cross_tenant",
+    "pii",
+    "tool_misuse",
+    "borderline",
+    "allowed",
+    "long_input",
+    "multilingual",
+    "detector_outage"
+  ]
+}
