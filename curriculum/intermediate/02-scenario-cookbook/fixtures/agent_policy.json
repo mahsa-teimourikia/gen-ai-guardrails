@@ -1,5 +1,6 @@
 {
   "version": "agent-policy.v1",
+  "owner": "hr-it-platform-team",
   "kill_switch": false,
   "budgets": {"max_writes_per_session": 3},
   "allowlist": {

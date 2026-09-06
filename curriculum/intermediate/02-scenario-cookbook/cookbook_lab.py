@@ -5,7 +5,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import date
 from enum import Enum
-import hashlib
 import json
 from pathlib import Path
 from typing import Any, Generic, Literal, TypeVar
@@ -104,10 +103,6 @@ def route_extraction(candidate: dict[str, Any], policy: dict[str, Any], today: d
     if min_confidence(claim) < float(policy["min_field_confidence"]):
         return GuardOutcome(Decision.ESCALATE, ["low_confidence"])
     return GuardOutcome(Decision.ALLOW, ["persist"])
-
-
-def identity_hash(identity: dict[str, Any]) -> str:
-    return hashlib.sha256(str(identity.get("user_id", "")).encode("utf-8")).hexdigest()
 
 
 @dataclass
