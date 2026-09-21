@@ -1,0 +1,83 @@
+[
+  {
+    "tool_id": "application-policy-and-authz",
+    "kind": "application_control",
+    "capabilities": ["authorization", "tenant_isolation", "approval", "idempotency", "tool_validation"],
+    "deployment": ["self_hosted", "managed", "hybrid"],
+    "provider_scope": "provider_neutral",
+    "evidence": "https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/",
+    "as_of": "2026-09-20"
+  },
+  {
+    "tool_id": "pydantic",
+    "kind": "application_control",
+    "capabilities": ["schema_validation", "typed_decisions"],
+    "deployment": ["self_hosted", "hybrid"],
+    "provider_scope": "provider_neutral",
+    "evidence": "https://docs.pydantic.dev/latest/",
+    "as_of": "2026-09-20"
+  },
+  {
+    "tool_id": "openai-guardrails-python",
+    "kind": "runtime_framework",
+    "capabilities": ["prompt_injection", "content_safety", "pii", "tool_input_output_checks", "evals"],
+    "deployment": ["managed", "hybrid"],
+    "provider_scope": "mixed",
+    "evidence": "https://openai.github.io/openai-guardrails-python/quickstart/",
+    "as_of": "2026-09-20"
+  },
+  {
+    "tool_id": "nemo-guardrails",
+    "kind": "runtime_framework",
+    "capabilities": ["prompt_injection", "content_safety", "pii", "retrieval_checks", "dialog_flows", "tool_input_output_checks", "evals"],
+    "deployment": ["self_hosted", "managed", "hybrid"],
+    "provider_scope": "provider_neutral",
+    "evidence": "https://docs.nvidia.com/nemo/guardrails/about-nemo-guardrails-library/rail-types",
+    "as_of": "2026-09-20"
+  },
+  {
+    "tool_id": "guardrails-ai",
+    "kind": "runtime_framework",
+    "capabilities": ["schema_validation", "input_validation", "output_validation", "validator_catalog"],
+    "deployment": ["self_hosted", "managed", "hybrid"],
+    "provider_scope": "provider_neutral",
+    "evidence": "https://guardrailsai.com/guardrails/docs",
+    "as_of": "2026-09-20"
+  },
+  {
+    "tool_id": "presidio",
+    "kind": "specialist_detector",
+    "capabilities": ["pii", "redaction", "anonymization"],
+    "deployment": ["self_hosted", "hybrid"],
+    "provider_scope": "provider_neutral",
+    "evidence": "https://microsoft.github.io/presidio/",
+    "as_of": "2026-09-20"
+  },
+  {
+    "tool_id": "managed-runtime-guardrail",
+    "kind": "managed_service",
+    "capabilities": ["prompt_injection", "content_safety", "pii", "grounding", "multimodal"],
+    "deployment": ["managed", "hybrid"],
+    "provider_scope": "mixed",
+    "evidence": "https://docs.cloud.google.com/model-armor/overview",
+    "as_of": "2026-09-20"
+  },
+  {
+    "tool_id": "promptfoo",
+    "kind": "evaluation",
+    "capabilities": ["evals", "red_teaming", "ci_gates"],
+    "deployment": ["self_hosted", "managed", "hybrid"],
+    "provider_scope": "provider_neutral",
+    "evidence": "https://github.com/promptfoo/promptfoo",
+    "as_of": "2026-09-20"
+  },
+  {
+    "tool_id": "openinference-opentelemetry",
+    "kind": "observability",
+    "capabilities": ["telemetry", "trace_semantics", "evaluation_annotations"],
+    "deployment": ["self_hosted", "managed", "hybrid"],
+    "provider_scope": "provider_neutral",
+    "evidence": "https://arize-ai.github.io/openinference/spec/",
+    "as_of": "2026-09-20"
+  }
+]

@@ -362,6 +362,53 @@ evidence = audit_side_effects(results, state, capabilities)`,
       },
     ],
   },
+  {
+    id: "a4",
+    level: "Advanced",
+    step: "04",
+    title: "State-of-the-art stack",
+    description:
+      "Compare current frameworks, specialist detectors, managed services, evaluation tools, and telemetry against explicit requirements.",
+    time: "75–90 min",
+    outcome:
+      "Defend a dated, replaceable stack decision with application-owned policy, normalized SDK signals, outage behavior, and release evidence.",
+    summary:
+      "The frontier is a composed control system, not one classifier. This lesson separates deterministic application invariants from runtime frameworks and services, then uses Pydantic contracts and frozen SDK responses to make replacement and evaluation concrete.",
+    exercise:
+      "Select a stack for the benefits-support scenario, normalize three response shapes, compare degraded reads with fail-closed writes, and raise a threshold to make the release gate catch a false negative.",
+    failures: [
+      "Treating a safety score as authorization",
+      "Selecting from feature lists without a workload bake-off",
+      "Letting SDK defaults choose outage behavior",
+      "Logging raw sensitive content into every trace",
+    ],
+    notebook: "curriculum/advanced/04-state-of-the-art-stack/state_of_the_art_stack.ipynb",
+    refs: [
+      "curriculum/advanced/04-state-of-the-art-stack/README.md#common-tools-and-where-they-fit",
+      "curriculum/advanced/04-state-of-the-art-stack/README.md#a-risk-driven-selection-method",
+    ],
+    code: `signal = adapter.normalize(vendor_response)
+outcome = policy.decide(signal, operation="write")
+metrics = evaluate(frozen_cases, policy)
+assert release_gate(metrics).passed`,
+    checkpoints: [
+      {
+        question: "Which control must remain application-owned?",
+        options: ["Authorization", "A vendor's confidence label", "A product comparison table"],
+        answer: 0,
+      },
+      {
+        question: "Why normalize SDK responses?",
+        options: ["To remove evaluation", "To keep policy stable when components change", "To make every detector agree"],
+        answer: 1,
+      },
+      {
+        question: "What belongs in a stack bake-off?",
+        options: ["Only vendor demo accuracy", "Only feature count", "Errors, slices, latency, cost, privacy, and outage behavior"],
+        answer: 2,
+      },
+    ],
+  },
 ];
 
 const levels: Record<Level, { color: string; tagline: string }> = {
