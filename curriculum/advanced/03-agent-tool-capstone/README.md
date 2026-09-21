@@ -88,4 +88,4 @@ Use the contributor setup in the [root README](../../../README.md#run-locally). 
 
 ## Where this fits
 
-This is the capstone after [Security and privacy](../02-security-and-privacy/README.md). Continue to the learning roadmap for future platform integrations.
+This is the capstone after [Security and privacy](../02-security-and-privacy/README.md). Continue to [State of the art: selecting a guardrail stack](../04-state-of-the-art-stack/README.md) to map these controls onto current frameworks, services, evaluation tools, and telemetry without outsourcing application policy.

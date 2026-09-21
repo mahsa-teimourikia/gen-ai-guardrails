@@ -15,6 +15,7 @@ This track is for engineers, evaluators, and security practitioners responsible 
 - Run authorized red-team exercises with synthetic data and complete traces.
 - Model injection, privacy, tool, supply-chain, and incident-response risks.
 - Constrain agent trajectories with approvals, budgets, receipts, and reconciliation.
+- Select current frameworks, services, evaluation tools, and telemetry against explicit requirements.
 
 ## Course sequence
 
@@ -23,6 +24,7 @@ This track is for engineers, evaluators, and security practitioners responsible 
 | [01 — Evaluation and red teaming](01-evaluation-and-red-teaming/README.md) | How do we know controls work under attack? | Measure, calibrate, red-team, and gate a guardrail with tests |
 | [02 — Security and privacy](02-security-and-privacy/README.md) | How do we operate controls against threats? | Protect identities, data, tools, dependencies, and incident evidence with tests |
 | [03 — Agent and tool capstone](03-agent-tool-capstone/README.md) | How do we bound agentic side effects? | Enforce approvals, budgets, receipts, and reconciliation |
+| [04 — State-of-the-art stack](04-state-of-the-art-stack/README.md) | How do we select and compose current tools? | Normalize SDKs, compare deployment trade-offs, and gate a replaceable stack |
 
 ### 01 — Evaluation and red teaming
 
@@ -41,3 +43,9 @@ This track is for engineers, evaluators, and security practitioners responsible 
 **Key concepts:** dynamic capability exposure, typed tool arguments, approval fingerprints, budgets, loop detection, execution-time authorization, receipts, and reconciliation.
 
 **Exit criterion:** run and evaluate a bounded onboarding trajectory with zero unauthorized actions and complete audit evidence.
+
+### 04 — State-of-the-art stack
+
+**Key concepts:** application-owned invariants, current runtime frameworks, specialist detectors, managed services, provider-neutral adapters, bake-offs, failure policy, and AI-aware telemetry.
+
+**Exit criterion:** create and defend a dated stack decision using primary sources, typed integration contracts, representative evaluation data, explicit outage behavior, and a release gate.

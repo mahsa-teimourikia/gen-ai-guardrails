@@ -31,7 +31,8 @@ This repository explains the concepts from first principles, provides scenario r
 3. Work through [best practices](curriculum/intermediate/01-best-practices/README.md) before choosing a framework.
 4. Pick a recipe in the [scenario cookbook](#scenario-cookbook) and adapt its policy, failure response, and tests.
 5. Study [evaluation and red teaming](curriculum/advanced/01-evaluation-and-red-teaming/README.md) with a representative adversarial dataset.
-6. [Open the Learning Hub →](https://mahsa-teimourikia.github.io/gen-ai-guardrails/) and take the [interactive GenAI Guardrails Knowledge Check](https://mahsa-teimourikia.github.io/gen-ai-guardrails/quiz/).
+6. Complete the [agent and tool capstone](curriculum/advanced/03-agent-tool-capstone/README.md), then use the [state-of-the-art stack guide](curriculum/advanced/04-state-of-the-art-stack/README.md) to select replaceable implementation components.
+7. [Open the Learning Hub →](https://mahsa-teimourikia.github.io/gen-ai-guardrails/) and take the [interactive GenAI Guardrails Knowledge Check](https://mahsa-teimourikia.github.io/gen-ai-guardrails/quiz/).
 
 ## Guardrails visual model
 
@@ -71,6 +72,7 @@ The curriculum progresses from understanding the control model, to designing con
 | [Evaluation and red teaming](curriculum/advanced/01-evaluation-and-red-teaming/README.md) | How do we know controls work under attack? | Measure, calibrate, red-team, and gate a guardrail with tests |
 | [Security and privacy](curriculum/advanced/02-security-and-privacy/README.md) | How do we operate controls against threats? | Protect identities, data, tools, dependencies, and incident evidence with tests |
 | [Agent and tool capstone](curriculum/advanced/03-agent-tool-capstone/README.md) | How do we bound agentic side effects? | Enforce approvals, budgets, receipts, and reconciliation |
+| [State-of-the-art stack](curriculum/advanced/04-state-of-the-art-stack/README.md) | How do we select and compose current tools? | Compare frameworks, normalize SDKs, evaluate trade-offs, and preserve application-owned policy |
 
 See the complete [curriculum map](curriculum/README.md).
 
@@ -142,6 +144,7 @@ The [NeMo Guardrails rail types](https://docs.nvidia.com/nemo/guardrails/about-n
 
 ### Programmable guardrail frameworks
 
+- [OpenAI Guardrails Python](https://github.com/openai/openai-guardrails-python) — configurable preflight, input, output, and agent/tool checks around OpenAI-compatible clients, with labeled evaluation tooling.
 - [NVIDIA NeMo Guardrails](https://github.com/NVIDIA/NeMo-Guardrails) — Python toolkit with YAML, Colang flows, input/retrieval/dialog/execution/output rails, custom actions, evaluation, and observability.
 - [Guardrails AI](https://github.com/guardrails-ai/guardrails) — validators and input/output guards, with a hub of reusable validators.
 - [Guidance](https://github.com/guidance-ai/guidance) — constrained generation and structured control.
@@ -157,6 +160,8 @@ The [NeMo Guardrails rail types](https://docs.nvidia.com/nemo/guardrails/about-n
 - [Presidio](https://github.com/microsoft/presidio) — PII detection, anonymization, and de-identification.
 - [Protect AI LLM Guard](https://github.com/protectai/llm-guard) — input/output scanners for prompt injection, sensitive data, toxicity, and more.
 - [NVIDIA NeMo Guardrails catalog](https://docs.nvidia.com/nemo/guardrails/configure-guardrails/guardrail-catalog) — configurable safety, jailbreak, topic, PII, hallucination, and agentic-security rails.
+- [Amazon Bedrock Guardrails](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-components.html) — managed content, prompt-attack, topic, PII, grounding, and automated-reasoning checks.
+- [Google Cloud Model Armor](https://docs.cloud.google.com/model-armor/overview) — managed prompt/response screening for injection, safety, sensitive data, URLs, documents, and supported image flows.
 
 ### Policy, observability, and testing
 
@@ -169,6 +174,8 @@ The [NeMo Guardrails rail types](https://docs.nvidia.com/nemo/guardrails/about-n
 - [PyRIT](https://github.com/Azure/PyRIT) — Microsoft's open-source risk identification toolkit for generative AI.
 - [Inspect AI](https://github.com/UKGovernmentBEIS/inspect_ai) — evaluation framework from the UK AI Security Institute.
 - [DeepEval](https://github.com/confident-ai/deepeval) — test framework for LLM applications and safety criteria.
+
+The dated [state-of-the-art stack module](curriculum/advanced/04-state-of-the-art-stack/README.md) turns this catalog into a selection method, adapter lab, evaluation matrix, and replacement plan. Capability lists are starting points, not safety guarantees or procurement recommendations.
 
 ## Scenario cookbook
 
@@ -204,7 +211,7 @@ Use [OWASP's LLM risks](https://genai.owasp.org/llm-top-10/), [OWASP agentic thr
 
 ## Interactive knowledge check
 
-Take the [GenAI Guardrails Knowledge Check](https://mahsa-teimourikia.github.io/gen-ai-guardrails/quiz/)—30 multiple-answer questions covering guardrail layers, policy design, injection, privacy, tools, evaluation, operations, and agent capstones. It grades exact answer sets, gives topic scores, reveals explanations on request, and stores progress only in the browser.
+Take the [GenAI Guardrails Knowledge Check](https://mahsa-teimourikia.github.io/gen-ai-guardrails/quiz/)—34 multiple-answer questions covering guardrail layers, policy design, injection, privacy, tools, evaluation, operations, agent capstones, and stack selection. It grades exact answer sets, gives topic scores, reveals explanations on request, and stores progress only in the browser.
 
 ## Official and open-source resources
 

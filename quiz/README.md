@@ -6,5 +6,5 @@ This directory contains the dependency-light quiz published at
 It is an interactive, multi-answer check covering the concepts in the
 [curriculum](../curriculum/README.md). Question sources link back to the
 corresponding repository lessons so learners can review the underlying
-guidance. The 30 questions span the seven runnable courses, including the
-Agents & Capstone category.
+guidance. The 34 questions span the eight runnable courses, including the
+Agents & Capstone and Stack Selection categories.

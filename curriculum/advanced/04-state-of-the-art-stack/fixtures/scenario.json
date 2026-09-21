@@ -1,0 +1,16 @@
+{
+  "name": "multi-tenant benefits support assistant",
+  "required_capabilities": [
+    "authorization",
+    "schema_validation",
+    "prompt_injection",
+    "content_safety",
+    "pii",
+    "tool_validation",
+    "evals",
+    "telemetry"
+  ],
+  "required_kinds": ["application_control", "runtime_framework", "evaluation", "observability"],
+  "allowed_deployment": ["self_hosted", "hybrid"],
+  "require_provider_neutral": true
+}

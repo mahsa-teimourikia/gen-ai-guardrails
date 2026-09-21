@@ -1,0 +1,51 @@
+[
+  {
+    "case_id": "safe-read",
+    "operation": "read",
+    "expected": "allow",
+    "signals": [
+      {"source": "openai_guardrails", "response": {"guardrail_name": "prompt_injection", "tripwire_triggered": false, "score": 0.04, "reason": "no_attack"}},
+      {"source": "nemo", "response": {"rail": "content_safety", "status": "allowed", "confidence": 0.02, "reason": "within_policy"}}
+    ]
+  },
+  {
+    "case_id": "indirect-injection-write",
+    "operation": "write",
+    "expected": "block",
+    "signals": [
+      {"source": "managed_service", "response": {"category": "prompt_injection", "action": "BLOCKED", "confidence": 0.97, "code": "document_attack"}}
+    ]
+  },
+  {
+    "case_id": "pii-transform",
+    "operation": "read",
+    "expected": "transform",
+    "signals": [
+      {"source": "nemo", "response": {"rail": "pii", "status": "blocked", "confidence": 0.94, "reason": "email_detected"}}
+    ]
+  },
+  {
+    "case_id": "high-risk-content",
+    "operation": "read",
+    "expected": "escalate",
+    "signals": [
+      {"source": "openai_guardrails", "response": {"guardrail_name": "content_safety", "tripwire_triggered": true, "score": 0.91, "reason": "self_harm_high"}}
+    ]
+  },
+  {
+    "case_id": "read-degraded",
+    "operation": "read",
+    "expected": "allow",
+    "signals": [
+      {"source": "nemo", "response": {"rail": "prompt_injection", "status": "error", "confidence": 0.0, "reason": "timeout"}}
+    ]
+  },
+  {
+    "case_id": "write-fail-closed",
+    "operation": "write",
+    "expected": "block",
+    "signals": [
+      {"source": "managed_service", "response": {"category": "prompt_injection", "action": "ERROR", "confidence": 0.0, "code": "dependency_timeout"}}
+    ]
+  }
+]

@@ -86,6 +86,7 @@ Finish with [`advanced/README.md`](advanced/README.md).
 | [01 — Evaluation and red teaming](advanced/01-evaluation-and-red-teaming/README.md) | How do we know controls work under attack? | Measure, calibrate, red-team, and gate a guardrail with tests |
 | [02 — Security and privacy](advanced/02-security-and-privacy/README.md) | How do we operate controls against real threats? | Model threats, protect data and tools, and test incident response |
 | [03 — Agent and tool capstone](advanced/03-agent-tool-capstone/README.md) | How do we bound agentic side effects? | Enforce approvals, budgets, receipts, and reconciliation |
+| [04 — State-of-the-art stack](advanced/04-state-of-the-art-stack/README.md) | How do we select and compose current tools? | Compare frameworks, normalize SDKs, and evaluate a replaceable stack |
 
 ```text
 measurement
@@ -95,6 +96,8 @@ adversarial evidence
 secure operation
       ↓
 bounded agent execution
+      ↓
+evidence-based stack selection
 ```
 
-**Exit capability:** evaluate controls by safety, reliability, security, and operations dimensions, operate them with privacy-aware evidence, and bound agent side effects.
+**Exit capability:** evaluate controls by safety, reliability, security, and operations dimensions, operate them with privacy-aware evidence, bound agent side effects, and choose an implementation stack without outsourcing application policy to a vendor.
