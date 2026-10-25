@@ -20,6 +20,7 @@ type Lesson = {
   exercise: string;
   failures: string[];
   notebook: string;
+  lab: string;
   refs: string[];
   code: string;
   checkpoints: Checkpoint[];
@@ -51,6 +52,7 @@ const lessons: Lesson[] = [
       "Logging raw PII instead of audit-safe evidence",
     ],
     notebook: "curriculum/beginner/01-what-are-guardrails/what_are_guardrails.ipynb",
+    lab: "curriculum/beginner/01-what-are-guardrails/guardrails_lab.py",
     refs: [
       "curriculum/beginner/01-what-are-guardrails/README.md#the-operating-envelope-model",
       "curriculum/beginner/01-what-are-guardrails/README.md#execution-rails",
@@ -101,6 +103,7 @@ decision = policy.evaluate(request, evidence)`,
       "Enforcing globally without a shadow baseline",
     ],
     notebook: "curriculum/beginner/02-guardrail-lifecycle/guardrail_lifecycle.ipynb",
+    lab: "curriculum/beginner/02-guardrail-lifecycle/lifecycle_lab.py",
     refs: [
       "curriculum/beginner/02-guardrail-lifecycle/README.md#8-measure",
       "curriculum/beginner/02-guardrail-lifecycle/README.md#a-staged-rollout",
@@ -148,6 +151,7 @@ decision = policy.evaluate(request, evidence)`,
       "Promoting a change without regression evidence",
     ],
     notebook: "curriculum/intermediate/01-best-practices/best_practices.ipynb",
+    lab: "curriculum/intermediate/01-best-practices/best_practices_lab.py",
     refs: [
       "curriculum/intermediate/01-best-practices/README.md#11-use-budgets-and-circuit-breakers",
       "curriculum/intermediate/01-best-practices/README.md#release-checklist",
@@ -195,6 +199,7 @@ if not release_gate.all_required_checks_pass():
       "Treating moderation scores as authorization",
     ],
     notebook: "curriculum/intermediate/02-scenario-cookbook/scenario_cookbook.ipynb",
+    lab: "curriculum/intermediate/02-scenario-cookbook/cookbook_lab.py",
     refs: [
       "curriculum/intermediate/02-scenario-cookbook/README.md#data-extraction-pipeline",
       "curriculum/intermediate/02-scenario-cookbook/README.md#agent-that-writes-to-external-systems",
@@ -243,6 +248,7 @@ return executor.run(action, idempotency_key=action.key)`,
       "Choosing thresholds without false-negative cost",
     ],
     notebook: "curriculum/advanced/01-evaluation-and-red-teaming/evaluation_and_red_teaming.ipynb",
+    lab: "curriculum/advanced/01-evaluation-and-red-teaming/evaluation_lab.py",
     refs: [
       "curriculum/advanced/01-evaluation-and-red-teaming/README.md#metrics",
       "curriculum/advanced/01-evaluation-and-red-teaming/README.md#threshold-selection",
@@ -290,6 +296,7 @@ release = bypasses == 0 and unauthorized_actions == 0`,
       "Accepting an artifact or log after tampering",
     ],
     notebook: "curriculum/advanced/02-security-and-privacy/security_and_privacy.ipynb",
+    lab: "curriculum/advanced/02-security-and-privacy/security_lab.py",
     refs: [
       "curriculum/advanced/02-security-and-privacy/README.md#authorization-is-not-a-guardrail-score",
       "curriculum/advanced/02-security-and-privacy/README.md#incident-response",
@@ -337,6 +344,7 @@ assert executed.reason_codes == ["session_revoked"]`,
       "Treating receipts as proof without verification",
     ],
     notebook: "curriculum/advanced/03-agent-tool-capstone/agent_tool_capstone.ipynb",
+    lab: "curriculum/advanced/03-agent-tool-capstone/capstone_lab.py",
     refs: [
       "curriculum/advanced/03-agent-tool-capstone/README.md#dynamic-capability-exposure",
       "curriculum/advanced/03-agent-tool-capstone/README.md#trajectory-evaluation-and-capstone-gate",
@@ -383,6 +391,7 @@ evidence = audit_side_effects(results, state, capabilities)`,
       "Logging raw sensitive content into every trace",
     ],
     notebook: "curriculum/advanced/04-state-of-the-art-stack/state_of_the_art_stack.ipynb",
+    lab: "curriculum/advanced/04-state-of-the-art-stack/stack_lab.py",
     refs: [
       "curriculum/advanced/04-state-of-the-art-stack/README.md#common-tools-and-where-they-fit",
       "curriculum/advanced/04-state-of-the-art-stack/README.md#a-risk-driven-selection-method",
@@ -552,7 +561,7 @@ export default function Home() {
               <div className="diagram"><div className="diagram-label">THE STUDY LOOP</div><div className="flow"><div className="flow-box">Read<small>concept</small></div><i>→</i><div className="flow-box active-box">Run<small>notebook</small></div><i>→</i><div className="flow-box">Change<small>one thing</small></div></div><div className="diagram-note">Make the failure visible.<br /><span>Then turn the fix into a test.</span></div><div className="reference-list"><span className="eyebrow">SOURCE MATERIAL</span>{selected.refs.map((ref, index) => <a key={ref} href={base + ref} target="_blank" rel="noreferrer"><span>0{index + 1}</span>{ref} ↗</a>)}</div></div>
             </div>
           )}
-          {tab === "lab" && <div className="lab-layout"><div className="lesson-copy"><div className="eyebrow">PRACTICAL LAB</div><p className="big-copy">{selected.exercise}</p><a className="notebook-link" href={base + selected.notebook} target="_blank" rel="noreferrer">Run the guided notebook ↗</a><div className="lab-note"><b>Study ritual from the repo</b><br />Use the notebook as the primary lab: run it, change one variable, run the tests, and explain one failure mode.</div></div><pre><code>{selected.code}</code></pre></div>}
+          {tab === "lab" && <div className="lab-layout"><div className="lesson-copy"><div className="eyebrow">PRACTICAL LAB</div><p className="big-copy">{selected.exercise}</p><div className="material-actions"><a className="notebook-link" href={base + selected.notebook} target="_blank" rel="noreferrer">Run the guided notebook ↗</a><a className="inline-link" href={base + selected.lab} target="_blank" rel="noreferrer">Inspect the reusable lab module ↗</a></div><div className="lab-note"><b>Study ritual from the repo</b><br />Run the notebook, trace the reusable implementation, change one variable, run the tests, and explain one failure mode.</div></div><pre><code>{selected.code}</code></pre></div>}
           {tab === "checkpoint" && <div className="quiz workspace-single-column"><div className="quiz-head"><div><div className="eyebrow">CHECKPOINT QUIZ</div><p>Choose the answer that follows the lesson’s executable controls.</p></div><div className="score">{Object.keys(answers).length ? `${score}/${selected.checkpoints.length}` : "—"}<small>score</small></div></div>{selected.checkpoints.map((checkpoint, index) => <div className="question" key={checkpoint.question}><b>{String(index + 1).padStart(2, "0")} / {checkpoint.question}</b><div className="options">{checkpoint.options.map((option, optionIndex) => <button key={option} onClick={() => setAnswers({ ...answers, [index]: optionIndex })} className={answers[index] === optionIndex ? (optionIndex === checkpoint.answer ? "correct" : "wrong") : ""}>{option}<span>{answers[index] === optionIndex ? (optionIndex === checkpoint.answer ? "✓" : "×") : ""}</span></button>)}</div></div>)}</div>}
         </div>
       </section>

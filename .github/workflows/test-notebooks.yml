@@ -6,6 +6,8 @@ on:
       - "**/*.ipynb"
       - "curriculum/**/*.py"
       - "scripts/run_notebooks.py"
+      - "pyproject.toml"
+      - "uv.lock"
       - ".github/workflows/test-notebooks.yml"
   workflow_dispatch:
 
@@ -16,19 +18,18 @@ jobs:
   notebooks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7.1.0
         with:
           python-version: "3.11"
-      - name: Install contributor tools
-        run: python -m pip install -e '.[contributor]'
-      - name: Register notebook kernel
-        run: python -m ipykernel install --user --name python3
+      - uses: astral-sh/setup-uv@v10.3.2
+      - name: Sync locked contributor environment
+        run: uv sync --locked --extra contributor
       - name: Execute changed notebooks
         if: github.event_name == 'pull_request'
-        run: python scripts/run_notebooks.py --base origin/${{ github.base_ref }}
+        run: uv run --locked --extra contributor python scripts/run_notebooks.py --base origin/${{ github.base_ref }}
       - name: Execute all notebooks
         if: github.event_name == 'workflow_dispatch'
-        run: python scripts/run_notebooks.py
+        run: uv run --locked --extra contributor python scripts/run_notebooks.py

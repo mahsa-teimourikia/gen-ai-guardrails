@@ -35,7 +35,7 @@ Evaluation
 Operational trade-offs
 ```
 
-The README is the technical training chapter. Planned notebooks will be practical companions, so learners understand the policy and trade-offs before relying on a framework abstraction.
+The README is the technical training chapter. Every published course has a credential-free notebook backed by the same reusable lab module and invariant tests used by the repository, so learners can connect policy and trade-offs to executable behavior before relying on a framework abstraction.
 
 > **Add complexity only when evaluation demonstrates the failure mode that complexity is intended to solve.**
 

@@ -52,9 +52,9 @@ Quiz questions must test concepts explained in the curriculum, have at least two
 | Internal curriculum links | `make links` |
 | Quiz or quiz sources | `make quiz-test` |
 | Changed notebooks | `make notebooks-changed` |
-| Python syntax | `python -m compileall -q curriculum tests` |
+| Complete release candidate | `make validate` |
 
-Document exact checks and results in the pull request.
+Run `make setup-contributor` after cloning to sync the committed Python lock and Node lock. Document exact checks and results in the pull request.
 
 ## Pull request review
 
