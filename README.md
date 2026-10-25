@@ -8,6 +8,8 @@ Guardrails are the policies, validators, controls, and recovery paths that keep 
 
 This repository explains the concepts from first principles, provides scenario recipes and provider-neutral companion files in the scenario-cookbook lesson, and links to maintained technologies and primary guidance. It covers both conversational LLM applications and tool-using agents.
 
+**Release status:** eight complete courses, eight credential-free notebooks, eight reusable lab modules, 24 lesson checkpoints, and a 34-question cross-course knowledge check.
+
 ## Contents
 
 - [Start here](#start-here)
@@ -93,12 +95,10 @@ See the complete [curriculum map](curriculum/README.md).
 git clone https://github.com/mahsa-teimourikia/gen-ai-guardrails.git
 cd gen-ai-guardrails
 make setup-contributor
-make test
-make quiz-test
-make pages
+make validate
 ```
 
-On Windows, create and activate a virtual environment manually with `py -3.11 -m venv .venv`, activate `.venv\Scripts\activate`, and install with `python -m pip install -e ".[contributor]"`. Run the Makefile commands from Git Bash or use the equivalent Python and npm commands in PowerShell.
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/) and Node.js 22 first. The locked environment supports Python 3.11–3.13. On Windows, run the Makefile commands from Git Bash or use the equivalent `uv` and `npm` commands in PowerShell; no manual virtual-environment activation is required.
 
 | Useful check | Command |
 | --- | --- |
@@ -107,9 +107,10 @@ On Windows, create and activate a virtual environment manually with `py -3.11 -m
 | Execute notebooks | `make notebooks` |
 | Quiz tests | `make quiz-test` |
 | Learning Hub | `make pages` |
-| Python syntax | `python -m compileall -q curriculum tests` |
+| Complete release gate | `make validate` |
+| Serve the built Hub | `make serve-hub` |
 
-Use `make notebooks-changed` to execute only notebooks changed from `origin/main`.
+Use `make notebooks-changed` to execute only notebooks changed from `origin/main`. The committed `uv.lock` is authoritative for contributor and CI installs; update it intentionally with `uv lock` when dependency constraints change.
 
 ## Guardrail layers
 

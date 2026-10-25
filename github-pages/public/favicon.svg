@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">GenAI Guardrails</title>
+  <desc id="desc">One plus i monogram on a green background</desc>
+  <rect width="64" height="64" rx="14" fill="#1d6d5c"/>
+  <text x="32" y="40" text-anchor="middle" font-family="Georgia, serif" font-size="30" font-weight="700" fill="#ffffff">1+i</text>
+</svg>
